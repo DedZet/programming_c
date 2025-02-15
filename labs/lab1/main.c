@@ -4,12 +4,20 @@
 
 
 int main(int argc, char *argv[]) {
-	float a, b, c, dm, x1, x2, d;
+	double a, b, c, dm, x1, x2, d;
 	
-	a = 1;
-	b = 5;
-	c = 3;
+	printf("Enter A: ");
+	scanf("%lf,", &a);
+	
+	printf("Enter B: ");
+	scanf("%lf,", &b);
+	
+	printf("Enter C: ");
+	scanf("%lf,", &c);
+
 	d = pow(b,2)-4*a*c; // pow - ñòåïåíü
+	
+	printf("\n");
 	
 	if (d < 0) 
 	{
