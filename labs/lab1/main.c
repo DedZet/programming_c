@@ -31,13 +31,7 @@ int main() {
 		if (d < 0) 
 		{
 			printf("D = %lf\n", d);
-			printf("Kornei net\n");
-			
-			printf("Continue? y/n\n");
-			scanf("\n%c,", &resp);
-			
-			
-			
+			printf("Kornei net\n");			
 		}
 
 		else if (d == 0) 
@@ -45,14 +39,9 @@ int main() {
 			x1 = -b /(2*a);
 			printf("D = %lf\n", d);
 			printf("x1 = %lf\n", x1);
-			
-			printf("Continue? y/n\n");
-			scanf("\n%c,", &resp);
-			
 		}
 		
 		else 
-		
 		{
 		x1 = -b + sqrt(d)/(2*a);
 		x1 = -b - sqrt(d)/(2*a);
@@ -60,11 +49,10 @@ int main() {
 		printf("D = %lf\n", d);
 		printf("x1 = %lf\n", x1);
 		printf("x2 = %lf\n", x2);
+		}
 		
 		printf("Continue? y/n\n");
 		scanf("\n%c,", &resp);
-		
-		}
 	}
 	
 	return 0;
