@@ -20,8 +20,21 @@ int main(int argc, char *argv[]) {
         for (int j = 0; j < 3; j++) {
             suma += mat[i][j];
         }}
-    printf("%lf\t", suma, "/n"); printf("\n");
+    printf("%lf", suma, "\n"); printf("\n\n");
 ////////////////////////////////////////////////////
+    double d1;
+    int n;
+
+    printf("DIAGONAL 1: \n");
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            d1 += mat[i][j];
+
+        }}
+    printf("%lf", d1, "/n"); printf("\n");
+
+
+
 
 	
 	return 0;
