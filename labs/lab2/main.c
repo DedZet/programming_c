@@ -14,28 +14,33 @@ int main(int argc, char *argv[]) {
         }
         printf("\n");} printf("\n");
 ////////////////////////////////////////////////////
-    double suma;
-	printf("SUM: \n");
-	 for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            suma += mat[i][j];
-        }}
-    printf("%lf", suma, "\n"); printf("\n\n");
+//     double suma;
+// 	printf("SUM: \n");
+// 	 for (int i = 0; i < 3; i++) {
+//         for (int j = 0; j < 3; j++) {
+//             suma += mat[i][j];
+//         }}
+//     printf("%lf", suma, "\n"); printf("\n\n");
 ////////////////////////////////////////////////////
-    double d1;
-    int n;
+    // double d1;
+    // printf("DIAGONAL 1: \n");
+    // for (int i = 0; i < 3; i++) {
+    //     for (int j = 0; j < 3; j++) {
+    //         if (i == j) {
+    //         d1 += mat[i][j];}
 
-    printf("DIAGONAL 1: \n");
+    //     }}
+    // printf("%lf", d1, "/n"); printf("\n");
+////////////////////////////////////////////////////
+    double d2;
+    printf("DIAGONAL 2: \n");
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            d1 += mat[i][j];
+            if (i+j == 2) {
+            d2 += mat[i][j];}
 
         }}
-    printf("%lf", d1, "/n"); printf("\n");
+    printf("%lf", d2, "/n"); printf("\n");
 
-
-
-
-	
 	return 0;
 }
