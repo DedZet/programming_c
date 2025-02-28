@@ -3,15 +3,11 @@
 
 int main(int argc, char *argv[]) {
     int x1,x2,x3,x4;
-    x1 = 1;
-    x2 = 3;
-    x3 = 5;
-    x4 = 4;
-    // printf("First row \n");
-    // scanf("%d %d %d", &x1, &x2);
+    printf("First row \n");
+    scanf("%i %i", &x1, &x2);
     
-    // printf("Second row \n");
-    // scanf("%d %d %d", &x3, &x4);
+    printf("Second row \n");
+    scanf("%i %i", &x3, &x4);
 
 	int mat[2][2] = {
 		{x1,x2}, //6
