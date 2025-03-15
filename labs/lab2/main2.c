@@ -3,15 +3,12 @@
 
 int main(int argc, char *argv[]) {
 
-	double x[4];
-    for (int i = 0; i < 4; i++) {
-        scanf("%lf", &x[i]);
-    
+	double mat[2][2];
+	for (int i = 0; i < 2; i++) {
+	    for (int j = 0; j < 2; j++) {
+        	scanf("%lf", &x[i][j]);
+	    }
     }
-
-	double mat[2][2] = {
-		{x[0],x[1]},
-		{x[2],x[3]}};
 
 ////////////////////////////////////////////////////
 	printf("\nMATRIX:\n");
