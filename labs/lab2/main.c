@@ -3,23 +3,21 @@
 
 int main(int argc, char *argv[]) {
 
-    double x[9];
-    for (int i = 0; i < 9; i++) {
-        scanf("%lf", &x[i]);
+    double mat[3][3];
+    for (int i = 0; i < 3; i++) {
+	for (int j = 0; j < 3; j ++ ) {
+        	scanf("%lf", &mat[i][j]);
+	}
     }
-
-double mat[3][3] = {
-	{x[0],x[1],x[2]},
-	{x[3],x[4],x[5]}, 
-	{x[6],x[7],x[8]}}; 
-    
 ////////////////////////////////////////////////////
 	printf("\nMATRIX:\n");
 	for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            printf("%lf\t", mat[i][j], "/n");
-        }
-        printf("\n");} printf("\n");
+        	for (int j = 0; j < 3; j++) {
+            		printf("%lf\t", mat[i][j], "/n");
+        	}
+        	printf("\n");
+	}
+	printf("\n");
 ////////////////////////////////////////////////////
     double suma;
 	printf("SUM: \n");
