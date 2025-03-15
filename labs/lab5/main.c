@@ -2,17 +2,33 @@
 #include <math.h>
 #include <stdbool.h>
 
-void printarr(double arr[], int n) {
-    for (int i = 0; i < n; i++) {
-        printf("%f ", arr[i]);
+// void printarr(double arr[], int n) {
+//     for (int i = 0; i < n; i++) {
+//         printf("%f ", arr[i]);
+//     }
+// }
+
+void printmat(double mat[][], int r, int c) {
+    for (int i = 0; i < r; i++) {
+        for (int j = 0; j < c; j++) {
+            printf("%lf\t", mat[i][j], "/n");
+        }
     }
 }
 
-void typechoose() {
+int typechoose() {
     printf("Matrix / Array");
-    if (scanf("%c",)) {
-        
+    
+    char ch;
+    scanf("%c", &ch);
+    
+    if (toupper(ch) == "M") {
+        return 0;
     }
+    else if (toupper(ch) == "A") {
+        return 1;
+    }
+    else { return 2; }
     
 }
 
@@ -42,9 +58,11 @@ int main() {
     double array1[] = {1,2,3,4,3};
     double array2[] = {1,6,5,4,3};
 
-    
         
-    printarr(matrix1,5);
+    printmat(matrix2,3,3);
+    
+    return 0;
+}
     
     
     return 0;
