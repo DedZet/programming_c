@@ -8,13 +8,13 @@
 //     }
 // }
 
-void printmat(double mat[][], int r, int c) {
-    for (int i = 0; i < r; i++) {
-        for (int j = 0; j < c; j++) {
-            printf("%lf\t", mat[i][j], "/n");
-        }
-    }
-}
+
+void printMatrix(int row, int col, double m[row][col]) {
+    for(int i=0; i<row; i++){
+        for(int j=0; j<col; j++)
+            printf("%.2lf ", m[i][j]);
+        printf("\n");
+ }
 
 int typechoose() {
     printf("Matrix / Array");
@@ -59,7 +59,7 @@ int main() {
     double array2[] = {1,6,5,4,3};
 
         
-    printmat(matrix2,3,3);
+    printMatrix(3,3,matrix2);
     
     return 0;
 }
