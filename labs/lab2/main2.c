@@ -5,7 +5,7 @@ int main(int argc, char *argv[]) {
 
 	double x[4];
     for (int i = 0; i < 4; i++) {
-        scanf("%lf ", &x[i]);
+        scanf("%lf", &x[i]);
     
     }
 
@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
 	printf("\nMATRIX:\n");
 	for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
-            printf("%i\t", mat[i][j], "/n");
+            printf("%lf\t", mat[i][j], "/n");
         }
         printf("\n");
 	} printf("\n");
