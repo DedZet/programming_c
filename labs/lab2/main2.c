@@ -2,17 +2,17 @@
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
-    int x1,x2,x3,x4;
-    printf("First row \n");
-    scanf("%i %i", &x1, &x2);
-    
-    printf("Second row \n");
-    scanf("%i %i", &x3, &x4);
 
-	int mat[2][2] = {
-		{x1,x2}, //6
-		{x3,x4}, // 15
-	};
+	double x[4];
+    for (int i = 0; i < 9; i++) {
+        scanf("%lf", &x[i]);
+    
+    }
+
+	double mat[2][2] = {
+		{x[0],x[1]},
+		{x[2],x[3]}};
+
 ////////////////////////////////////////////////////
 	printf("\nMATRIX:\n");
 	for (int i = 0; i < 2; i++) {
