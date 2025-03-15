@@ -4,8 +4,8 @@
 int main(int argc, char *argv[]) {
 
 	double x[4];
-    for (int i = 0; i < 9; i++) {
-        scanf("%lf", &x[i]);
+    for (int i = 0; i < 4; i++) {
+        scanf("%lf ", &x[i]);
     
     }
 
