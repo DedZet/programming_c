@@ -2,6 +2,10 @@
 #include <stdbool.h>
 #include <math.h>
 
+void endl() {
+    printf("\n");
+}
+
 void printarr(int arr[]) {
     int len = sizeof(arr) - 1;
     for (int i = 0; i < len; i++) {
@@ -30,10 +34,9 @@ bool isprime(int n) {
     else {return false;}
 }
 
-
 int main() {
     
-    int P[] = {1,2,3,4,5,6,7};
+    int P[] = {1,2,4,3,5,6,7,11,12,13,20};
     int p = 2;
     
     printarr(P);
@@ -46,8 +49,20 @@ int main() {
         }
     }
     
-    printf("\n");
+    endl();
     printarr(P);
+
+        for (int co = 0; co < len; co++) {
+            if (co != 0 && p < P[co] ) {
+                p = P[co];
+                break;
+            }
+        }
+        
+        
+    
+    endl();
+    printf("%i", p);
     
     return 0;
 }
