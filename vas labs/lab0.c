@@ -34,11 +34,11 @@ bool isprime(int n) {
     else {return false;}
 }
 
-int* makearr(int n) {
+int* makearr(int size) {
     
-    static int arr[32];
+    int* arr = (int*)malloc(size * sizeof(int));
     
-    for (int i = 0; i < n + 1; i++) {
+    for (int i = 0; i < size; i++) {
         arr[i] = i;
     }
     
@@ -50,7 +50,7 @@ int main() {
     int P[] = {1,2,4,3,5,6,7,11,12,13,20};
     int p = 2;
     
-    int* jojo = makearr(22);
+    int* jojo = makearr(2);
     
     //printarr(P);
     //endl();
