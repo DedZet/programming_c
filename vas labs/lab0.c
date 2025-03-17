@@ -4,7 +4,7 @@
 
 void erat(int n) {
 
-    bool *isPrime = (bool *)malloc((n + 1) * sizeof(bool)); // выделение памяти для bool списка
+    bool *isPrime = (bool *)malloc((n + 1) * sizeof(bool));
     for (int i = 0; i <= n; i++) {
         isPrime[i] = true; 
     }
