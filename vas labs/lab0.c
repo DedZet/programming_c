@@ -9,7 +9,7 @@ void endl() {
 void printarr(int arr[]) {
     int len = sizeof(arr) - 1;
     for (int i = 0; i < len; i++) {
-        printf("%i ",arr[i]);
+        printf("%d ",arr[i]);
     }
 }
 
@@ -34,12 +34,27 @@ bool isprime(int n) {
     else {return false;}
 }
 
+int* makearr(int n) {
+    
+    static int arr[32];
+    
+    for (int i = 0; i < n + 1; i++) {
+        arr[i] = i;
+    }
+    
+    return arr;
+}
+
 int main() {
     
     int P[] = {1,2,4,3,5,6,7,11,12,13,20};
     int p = 2;
     
-    printarr(P);
+    int* jojo = makearr(22);
+    
+    //printarr(P);
+    //endl();
+    printarr(jojo);
     
     int len = sizeof(P) / sizeof(P[0]);
 
@@ -49,20 +64,20 @@ int main() {
         }
     }
     
-    endl();
-    printarr(P);
-
+    // endl();
+    // printarr(P);
+    
+        while (p < len) {
         for (int co = 0; co < len; co++) {
             if (co != 0 && p < P[co] ) {
                 p = P[co];
                 break;
             }
         }
+        }
         
-        
-    
-    endl();
-    printf("%i", p);
+    // endl();
+    // printf("%i", p);
     
     return 0;
 }
