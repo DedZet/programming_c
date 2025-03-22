@@ -62,6 +62,74 @@ int main() {
     printMatrix(3,3,matrix2);
     
     return 0;
+
+	// void printarr(double arr[], int n) {
+//     for (int i = 0; i < n; i++) {
+//         printf("%f ", arr[i]);
+//     }
+// }
+
+//     double mat[3][3];
+//     for (int i = 0; i < 3; i++) {
+// 	    for (int j = 0; j < 3; j ++ ) {
+//         	scanf("%lf", &mat[i][j]);
+// 	    }
+//     }
+		
+// 	double matrix2[3][3] = {
+//         {1,5,3},
+//         {4,4,4},
+//         {3,2,1}};
+    
+//     double array1[] = {1,2,3,4,3};
+//     double array2[] = {1,6,5,4,3};
+
+        
+//     printMatrix(3,3,matrix2);
+
+// void makemat() {
+
+//     int r = 3, c = 4;
+
+//     double* ptr = malloc((r * c) * sizeof(double));
+
+//     /* Putting 1 to 12 in the 1D array in a sequence */
+//     for (int i = 0; i < r * c; i++) {
+//         ptr[i] = i + 1;
+//     }
+
+//     /* Accessing the array values as if it was a 2D array */
+//     for (int i = 0; i < r; i++) {
+//         for (int j = 0; j < c; j++) {
+//             printf("%d ", ptr[i * c + j]);
+//         }
+//         printf("\n");
+//     }
+// }
+
+
+// void printMatrix(int row, int col, double m[row][col]) {
+//     for(int i=0; i<row; i++){
+//         for(int j=0; j<col; j++)
+//             printf("%.2lf ", m[i][j]);
+//         printf("\n");
+//  }
+
+// int typechoose() {
+//     printf("Matrix / Array");
+    
+//     char ch;
+//     scanf("%c", &ch);
+    
+//     if (toupper(ch) == "M") {
+//         return 0;
+//     }
+//     else if (toupper(ch) == "A") {
+//         return 1;
+//     }
+//     else { return 2; }
+    
+// }
 }
     
     
