@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 
-bool isvowel(char c) // Гласные звуки, Согласный искать отрицанием
+bool isvowel(char c)
 {
 	switch(tolower(c))
 	{
@@ -25,11 +25,11 @@ int main(int argc, char **argv)
     FILE *file;
     int ch;
     
-	int lines, digits, syms, spaces, letters, lowletr, upletr, vowel, cons, total = 0; 
-	// Строки, Цифры, Символы, Пробелы, Буквы, Ниж.рег., Верх.рег., гласные, согласные, итого
+	int lines, digits, punct, spaces, letters, lowletr, upletr, vowel, cons, total = 0; 
+	// РЎС‚СЂРѕРєРё, Р¦РёС„СЂС‹, РЎРёРјРІРѕР»С‹, РџСЂРѕР±РµР»С‹, Р‘СѓРєРІС‹, РќРёР¶.СЂРµРі, Р’РµСЂС….СЂРµРі, Р“Р»Р°СЃРЅС‹Рµ, РЎРѕРіР»Р°СЃРЅС‹Рµ, РС‚РѕРіРѕ
 
 	printf("Enter file name ");
-	if (scanf("%32s", filename) != 1) {
+	if (scanf("%31s", filename) != 1) {
         printf("Reading error\n");
         return 1;
     }
@@ -41,55 +41,43 @@ int main(int argc, char **argv)
     }
     
     printf("\n");
+    // Р’С‹РІРѕРґ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ
     while ((ch = fgetc(file)) != EOF) {
     	putchar(ch);
-    	
-    	if (ch == "\n") { // Кол-во новых строк [НЕ РАБОТАЕТ]
-    		lines++;
-		}
-    	
-    	if (isdigit(ch)) { // Кол-во цифр
-    		digits++;
 		}
 		
-		if (ispunct(ch)) { // Кол-во символов
-    		syms++;
+	fclose(file);
+	file = fopen(filename, "r");
+	
+	// РџРѕРґСЃС‡С‘С‚ РґР°РЅРЅС‹С…
+	while ((ch = fgetc(file)) != EOF) {
+    	total++;
+    	if (ch == '\n') lines++;
+        if (isdigit(ch)) digits++;
+        if (ispunct(ch)) punct++;
+        if (isspace(ch)) spaces++;
+        if (isalpha(ch)) {
+            letters++;
+            if (islower(ch)) lowletr++;
+            if (isupper(ch)) upletr++;
+   		}
+        if (isvowel(ch)) {
+            vowel++;
+        } else { 
+		cons++; 
 		}
-		
-		if (isspace(ch)) { // Кол-во пробелов
-    		spaces++;
-		}
-		
-		if (isalpha(ch)) { // Кол-во букв
-    		letters++;
-		}
-		
-		if (islower(ch)) { // Кол-во букв нижнего регистра
-    		lowletr++;
-		}
-		
-		if (isupper(ch)) { // Кол-во букв верхнего регистра
-    		upletr++;
-		}
-    	
-    	if (isvowel(ch)) { // Кол-во гласных
-    		vowel++;
-		}
-    }
-    
-    cons = letters - vowel; // Кол-во согласных
+	}
+    fclose(file);
     
 	printf("\n");
 	printf("--------------------------------");
 	
-	printf("\nlines=%d digits=%d symbols=%d\n", lines, digits-1, syms); // digits-1 т.к в конце он всегда ставит единицу
-	printf("letters=%d, low letters=%d, up letters=%d\n", letters, lowletr, upletr);
-	printf("spaces=%d, vowels=%d, consonants=%d\n", spaces, vowel, cons);
+	printf("\nlines = %d digits = %d puncts = %d\n", lines, digits-1, punct); // (digits-1) С‚.Рє РїРѕСЃР»РµРґРЅРёР№ Р±Р°Р№С‚ РІС‹РґРµР»СЏРµС‚СЃСЏ РґР»СЏ РѕР±РѕР·РЅР°С‡РµРЅРёСЏ РєРѕРЅС†Р° СЃС‚СЂРѕРєРё
+	printf("letters = %d, low letters = %d, up letters = %d\n", letters, lowletr, upletr);
+	printf("spaces = %d, vowels = %d, consonants = %d\n", spaces, vowel, cons);
 	
-	total = digits + syms + spaces + letters + lowletr + upletr + vowel + cons;
+	total = digits + punct + spaces + letters + lowletr + upletr + vowel + cons;
 	printf("total=%d",total);
-	
-	fclose(file);
+
  	return 0;
 }
-
