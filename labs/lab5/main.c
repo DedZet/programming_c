@@ -99,11 +99,11 @@ int main() {
 			
 		case '*':
 			if ((r==r2 && c==c2) || (r2==c)) {
-				
+				printf("%d",c2);
 				double mul[r2][c2];
 				int i,j,k =0;
 
-				for (i = 0; i < r2; i++) {
+				for (i = 0; i < r; i++) {
 	    			for (j = 0; j < c2; j++) {
 	        			mul[i][j] = 0;
 	        
@@ -111,9 +111,9 @@ int main() {
         					mul[i][j] += mat[i][k]*mat2[k][j];
         				}
 	    			}
-    			}			
+    			}
 				
-				printMatrix(r,c,mul);
+				printMatrix(r,c2,mul);
 			}
 			else {
 				printf("Matrix size error");
