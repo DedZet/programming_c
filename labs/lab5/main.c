@@ -57,11 +57,11 @@ int main() {
 
 	char op;
 	printf("\nenter operation: ");
-    scanf(" %c", &op); // Прабел паставел штоб не сщитывать enter
+    scanf(" %c", &op);
 
 	switch (op) {
 		case '+':
-			if (r==r2 && c==c2) { // Сложение матриц
+			if (r==r2 && c==c2) { 
 				double suma[r][c];
 
 				int i,j;
@@ -80,7 +80,7 @@ int main() {
 			break;
 			
 		case '-':
-			if (r==r2, c==c2) { // Вычитание матриц
+			if (r==r2 && c==c2) {
 				double sub[r][c];
 
 				int i,j;
@@ -98,17 +98,26 @@ int main() {
 			break;
 			
 		case '*':
-			printf("*"); // патом дапишу
-//			double mul[r][c];
-//
-//				int i,j;
-//	 			for (i = 0; i < r; i++) {
-//        			for (j = 0; j < c; j++) {
-//            			mul[i][j] = mat[i][j] + mat2[i][j];
-//        				}
-//				}
+			if ((r==r2 && c==c2) || (r2==c)) {
 				
-				//printMatrix(r,c,mul);
+				double mul[r2][c2];
+				int i,j,k =0;
+
+				for (i = 0; i < r2; i++) {
+	    			for (j = 0; j < c2; j++) {
+	        			mul[i][j] = 0;
+	        
+	        			for (k = 0; k < c2; k++) {
+        					mul[i][j] += mat[i][k]*mat2[k][j];
+        				}
+	    			}
+    			}			
+				
+				printMatrix(r,c,mul);
+			}
+			else {
+				printf("Matrix size error");
+			}
 			break;
 			
 		default:
