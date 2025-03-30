@@ -11,19 +11,14 @@ void printMatrix(int row, int col, double m[row][col]) {
     }
 }
 
-void makemat(char text[2]) {
-
-}
-
 int main() {
-    
-    
     
 	int r,c;
     printf("enter rows for M1: ");
     scanf("%i", &r);
     printf("enter columns for M1: ");
     scanf("%i", &c);
+    
     double mat[r][c];
     
     int i,j;
@@ -33,8 +28,8 @@ int main() {
 		}
     }
     
-    //////////////////////////////////////
     system("cls");
+    //////////////////////////////////////
     
     int r2,c2;
     printf("enter rows for M2: ");
@@ -51,6 +46,8 @@ int main() {
     }
     
 	system("cls");
+	//////////////////////////////////////
+
     printMatrix(r,c,mat);
     printf("\n");
 	printMatrix(r2,c2,mat2);
@@ -76,7 +73,6 @@ int main() {
 			else {
 				printf("Matrix size error");
 			}
-			free(op);
 			break;
 			
 		case '-':
@@ -99,15 +95,14 @@ int main() {
 			
 		case '*':
 			if ((r==r2 && c==c2) || (r2==c)) {
-				printf("%d",c2);
 				double mul[r2][c2];
-				int i,j,k =0;
+				int i,j,k = 0;
 
-				for (i = 0; i < r; i++) {
+				for (i = 0; i < r2; i++) {
 	    			for (j = 0; j < c2; j++) {
 	        			mul[i][j] = 0;
 	        
-	        			for (k = 0; k < c2; k++) {
+	        			for (k = 0; k < r2; k++) {
         					mul[i][j] += mat[i][k]*mat2[k][j];
         				}
 	    			}
@@ -122,6 +117,7 @@ int main() {
 			
 		default:
 			printf("Not an operation\n");
+			free(op);
 	
     return 0;
 	}
