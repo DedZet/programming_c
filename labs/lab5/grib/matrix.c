@@ -81,11 +81,5 @@ void matrix_op(int r, int c, int r2, int c2, double mat[r][c], double mat2[r2][c
 
 		}
 	}
-void free_matrix(double** matrix, int n) {
-	int i;
-    for (i = 0; i < n; i++) {
-        free(matrix[i]);
-    }
-    free(matrix);
-}
+
 
