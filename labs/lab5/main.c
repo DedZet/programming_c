@@ -8,11 +8,13 @@ int main() {
     printf("enter columns for M1: ");
     scanf("%i", &c);
     
-    double mat[r][c];
+    double** mat = (double**)malloc(r * sizeof(double*));
     
     int i,j;
     for (i = 0; i < r; i++) {
-	for (j = 0; j < c; j++) {
+    	mat[i] = (double*)malloc(c * sizeof(double));
+    	
+		for (j = 0; j < c; j++) {
         	scanf("%lf", &mat[i][j]);
 		}
     }
@@ -25,12 +27,14 @@ int main() {
     scanf("%i", &r2);
     printf("enter columns for M2: ");
     scanf("%i", &c2);
-    double mat2[r2][c2];
-    
-    int k,l;
-    for (k = 0; k < r2; k++) {
-	for (l = 0; l < c2; l++) {
-        	scanf("%lf", &mat2[k][l]);
+
+    double** mat2 = (double**)malloc(r2 * sizeof(double*));
+    // proverka
+    for (i = 0; i < r; i++) {
+    	mat2[i] = (double*)malloc(c2 * sizeof(double));
+    	
+		for (j = 0; j < c2; j++) {
+        	scanf("%lf", &mat2[i][j]);
 		}
     }
     
@@ -46,6 +50,9 @@ int main() {
     scanf(" %c", &op);
 
 	matrix_op(r,c,r2,c2,mat,mat2,op);
+	
+	free_matrix(mat, r);
+	free_matrix(mat2, r2);
 	
     return 0;
     
