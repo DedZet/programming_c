@@ -5,26 +5,23 @@
 #include <string.h>
 #include <sys/time.h>
 
-// здесь все что необходимо глобальное
-
 typedef struct word {
 	int count;
   	char *Word;
 	} WORD;
- 
+
 int cmpword_alpha(WORD *, WORD *);
 int cmpword_quant(WORD *, WORD *);
 
 WORD words[100000];
 
-int totalw=0;
+int totalw=0; // word count
 
 char *getword(FILE *F)
 	{
 	char *s; int c;
- 	// считываем одно слово из файла F
-
- 	// return NULL если файл закончился
+ 	// Г±Г·ГЁГІГ»ГўГ ГҐГ¬ Г®Г¤Г­Г® Г±Г«Г®ГўГ® ГЁГ§ ГґГ Г©Г«Г  F
+ 	// return NULL ГҐГ±Г«ГЁ ГґГ Г©Г« Г§Г ГЄГ®Г­Г·ГЁГ«Г±Гї
  	return s;
 	}
 
@@ -33,53 +30,70 @@ int main(int ac, char *av[])
 		
   	FILE *OUT1, *OUT2, *IN;
   	char *pword;
-  	// здесь открыть файлы для вывода,
-  	// проверка на успех,  инициализация переменных и т.д.
+  	// Г§Г¤ГҐГ±Гј Г®ГІГЄГ°Г»ГІГј ГґГ Г©Г«Г» Г¤Г«Гї ГўГ»ГўГ®Г¤Г ,
+  	// ГЇГ°Г®ГўГҐГ°ГЄГ  Г­Г  ГіГ±ГЇГҐГµ,  ГЁГ­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г»Гµ ГЁ ГІ.Г¤.
+  	
+  	char dirname[128];
+  	printf("Enter dir name ");
+  	scanf("%s", &dirname);
+  	IN = fopen(dirname, "r");
   	
   	if (ac<2)
   		{
   			
-    	printf ("Вы забыли указать список файлов!\n"); 
+    	printf("You forgot to specify the file list!\n");
 		exit (0);
     	
   		}
   		
-  	while (--ac) // идем по списку файлов
+  	while (--ac) // ГЁГ¤ГҐГ¬ ГЇГ® Г±ГЇГЁГ±ГЄГі ГґГ Г©Г«Г®Гў
   		{
   			
    		IN=fopen(av[ac],"r");
-   		printf("Обрабатывается файл %s\n",av[ac]);
-   		// открываем очередной файл
+   		printf("Processing files %s\n",av[ac]);
+   		// Г®ГІГЄГ°Г»ГўГ ГҐГ¬ Г®Г·ГҐГ°ГҐГ¤Г­Г®Г© ГґГ Г©Г«
    		
    		while ((pword=getword(IN))!=NULL)
-    		{ 	// .........................
-      			// работаем с прочитанным словом
-      			// добавляем в массив с увеличением totalw
-      			// или увеличиваем счетчик уже
-      			// занесенного в словарь слова
-      			//
-      			break;  // только для проверки
+    		{ 	
+      			// Г°Г ГЎГ®ГІГ ГҐГ¬ Г± ГЇГ°Г®Г·ГЁГІГ Г­Г­Г»Г¬ Г±Г«Г®ГўГ®Г¬
+      			// Г¤Г®ГЎГ ГўГ«ГїГҐГ¬ Гў Г¬Г Г±Г±ГЁГў Г± ГіГўГҐГ«ГЁГ·ГҐГ­ГЁГҐГ¬ totalw
+      			// ГЁГ«ГЁ ГіГўГҐГ«ГЁГ·ГЁГўГ ГҐГ¬ Г±Г·ГҐГІГ·ГЁГЄ ГіГ¦ГҐ
+      			// Г§Г Г­ГҐГ±ГҐГ­Г­Г®ГЈГ® Гў Г±Г«Г®ГўГ Г°Гј Г±Г«Г®ГўГ 
+      			// ГІГ®Г«ГјГЄГ® Г¤Г«Гї ГЇГ°Г®ГўГҐГ°ГЄГЁ
+
+      			break;  
     		}
 	fclose(IN);
   		}
   		
  	qsort(words,totalw,sizeof(WORD *),
-    (int (*)(const void *, const void *))cmpword_alpha ); // здесь вывод массива
+    (int (*)(const void *, const void *))cmpword_alpha ); // Г§Г¤ГҐГ±Гј ГўГ»ГўГ®Г¤ Г¬Г Г±Г±ГЁГўГ 
  	
  	qsort(words,totalw,sizeof(WORD *),
-    (int (*)(const void *, const void *))cmpword_quant ); // здесь вывод массива
- 	
+    (int (*)(const void *, const void *))cmpword_quant ); // Г§Г¤ГҐГ±Гј ГўГ»ГўГ®Г¤ Г¬Г Г±Г±ГЁГўГ 
  	
 	return 0; 
 	}
 	
-int cmpword_alpha(WORD *w1,  WORD *w2)
+int cmpword_alpha(WORD *w1,  WORD *w2) // Г”ГіГ­ГЄГ¶ГЁГї Г±Г°Г ГўГ­ГҐГ­ГЁГї Г±Г«Г®Гў Г¤Г«Гї Г±Г®Г°ГІГЁГ°Г®ГўГЄГЁ ГЇГ® Г Г«ГґГ ГўГЁГІГі
 	{
-  	printf("test_alpha");
+	const WORD *word1 = *(const WORD **) w1;
+    const WORD *word2 = *(const WORD **) w2;
+    
+    return strcmp(word1->Word, word2->Word);
+    
+	printf("test_alpha");
 	}
 	
-int cmpword_quant(WORD *w1,  WORD *w2)
+int cmpword_quant(WORD *w1,  WORD *w2) // Г”ГіГ­ГЄГ¶ГЁГї Г±Г°Г ГўГ­ГҐГ­ГЁГї Г·Г Г±ГІГ®ГІ Г¤Г«Гї Г±Г®Г°ГІГЁГ°Г®ГўГЄГЁ ГЇГ® Г·Г Г±ГІГ®ГІГҐ ГЇГ®ГїГўГ«ГҐГ­ГЁГ©
 	{
-  	printf("test_quant");
+	const WORD *word1 = *(const WORD **) w1;
+    const WORD *word2 = *(const WORD **) w2;
+    
+    if (word1->count > word2->count) return -1;
+    if (word1->count < word2->count) return 1;
+    
+    return strcmp(word1->Word, word2->Word);
+    
+	printf("test_quant");
 	}
-
