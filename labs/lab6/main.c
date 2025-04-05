@@ -15,7 +15,6 @@ int main(int argc, char *argv[]) {
 	SetConsoleOutputCP(CP_UTF8);
 	
 	int year;
-	
 	char line[128];
     while (fgets(line, sizeof(line), namedb)) 
 	{
@@ -26,8 +25,8 @@ int main(int argc, char *argv[]) {
 			{		
 					year = atoi(&line[i]);
 					if (year > 1980) {
-						printf("%d\n", year);
-						fprintf(output, "%.4s\n", &line[i]);
+						printf("%s\n", fgets(line, sizeof(line), namedb));
+						fprintf(output, "%s\n", fgets(line, sizeof(line), namedb));
 					}
             }
         }
