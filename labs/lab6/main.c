@@ -6,28 +6,22 @@
 
 int main(int argc, char *argv[]) {
 	
-	FILE *namedb;
-	FILE *output;
+	FILE *namedb, *output;
 	
 	namedb = fopen("namedb.txt", "r");
 	output = fopen("output.txt", "w");
-	int ch;
+	
 	SetConsoleOutputCP(CP_UTF8);
 	
 	int year;
-	char line[128];
-    while (fgets(line, sizeof(line), namedb)) 
-	{
-    	int i;
-        for (i = 0; i < strlen(line) - 3; ++i) 
-		{
-            if (isdigit(line[i]) && isdigit(line[i+1]) && isdigit(line[i+2]) && isdigit(line[i+3])) 
-			{		
-					year = atoi(&line[i]);
-					if (year > 1980) {
-						printf("%s\n", fgets(line, sizeof(line), namedb));
-						fprintf(output, "%s\n", fgets(line, sizeof(line), namedb));
-					}
+	char line[256], surname[50], name[50], surname2[50];
+	
+    while (fgets(line, sizeof(line), namedb))
+    {
+        if (sscanf(line, "%s %s %s %d", surname, name, surname2, &year) == 4) {
+            if (year > 1980) {
+                fprintf(output, "%s %s %s %d\n", surname, name, surname2, year);
+                printf("%s %s %s %d\n", surname, name, surname2, year);
             }
         }
     }
