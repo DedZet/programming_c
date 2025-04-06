@@ -41,14 +41,14 @@ char *getword(FILE *F) {
 	
 void add_word(const char *token) {
 	
-    // Ïðèâîäèì ñëîâî ê íèæíåìó ðåãèñòðó
+    // I?eaiaei neiai e ie?iaio ?aaeno?o
 //    char *lower_token = strdup(token);
 //    int i;
 //    for (i = 0; lower_token[i]; i++) {
 //        lower_token[i] = tolower(lower_token[i]);
 //    }
 //    
-//    // Ïðîâåðÿåì, åñòü ëè ñëîâî óæå â ñëîâàðå
+//    // I?iaa?yai, anou ee neiai o?a a neiaa?a
 //    int i;
 //    for (i = 0; i < word_count; i++) {
 //        if (strcmp(words[i]->w, lower_token) == 0) {
@@ -97,20 +97,20 @@ int main(int ac, char *av[])
     	
   		}
   		
-  	while (--ac) // èäåì ïî ñïèñêó ôàéëîâ
+  	while (--ac) // eaai ii nieneo oaeeia
   		{
   			
    		IN=fopen(av[ac],"r");
    		printf("Processing files %s\n",av[ac]);
-   		// îòêðûâàåì î÷åðåäíîé ôàéë
+   		// ioe?uaaai i?a?aaiie oaee
    		
    		while ((pword=getword(IN))!=NULL)
     		{ 	
-      			// ðàáîòàåì ñ ïðî÷èòàííûì ñëîâîì
-      			// äîáàâëÿåì â ìàññèâ ñ óâåëè÷åíèåì totalw
-      			// èëè óâåëè÷èâàåì ñ÷åò÷èê óæå
-      			// çàíåñåííîãî â ñëîâàðü ñëîâà
-      			// òîëüêî äëÿ ïðîâåðêè
+      			// ?aaioaai n i?i?eoaiiui neiaii
+      			// aiaaaeyai a iannea n oaaee?aieai totalw
+      			// eee oaaee?eaaai n?ao?ee o?a
+      			// caianaiiiai a neiaa?u neiaa
+      			// oieuei aey i?iaa?ee
 
       			break;  
     		}
@@ -118,10 +118,10 @@ int main(int ac, char *av[])
   		}
   		
  	qsort(words,totalw,sizeof(WORD *),
-    (int (*)(const void *, const void *))cmpword_alpha ); // çäåñü âûâîä ìàññèâà
+    (int (*)(const void *, const void *))cmpword_alpha ); // caanu auaia ianneaa
  	
  	qsort(words,totalw,sizeof(WORD *),
-    (int (*)(const void *, const void *))cmpword_quant ); // çäåñü âûâîä ìàññèâà
+    (int (*)(const void *, const void *))cmpword_quant ); // caanu auaia ianneaa
  	
 	return 0; 
 	}
@@ -129,7 +129,7 @@ int main(int ac, char *av[])
 /////////////////////////////////////////////////////
 /////////////////////////////////////////////////////
 	
-int cmpword_alpha(WORD *w1,  WORD *w2) // Ôóíêöèÿ ñðàâíåíèÿ ñëîâ äëÿ ñîðòèðîâêè ïî àëôàâèòó
+int cmpword_alpha(WORD *w1,  WORD *w2) // Ooieoey n?aaiaiey neia aey ni?oe?iaee ii aeoaaeoo
 	{
 	const WORD *word1 = *(const WORD **) w1;
     const WORD *word2 = *(const WORD **) w2;
@@ -139,7 +139,7 @@ int cmpword_alpha(WORD *w1,  WORD *w2) // Ôóíêöèÿ ñðàâíåíèÿ ñë
 	printf("test_alpha");
 	}
 	
-int cmpword_quant(WORD *w1,  WORD *w2) // Ôóíêöèÿ ñðàâíåíèÿ ÷àñòîò äëÿ ñîðòèðîâêè ïî ÷àñòîòå ïîÿâëåíèé
+int cmpword_quant(WORD *w1,  WORD *w2) // Ooieoey n?aaiaiey ?anoio aey ni?oe?iaee ii ?anoioa iiyaeaiee
 	{
 	const WORD *word1 = *(const WORD **) w1;	
     const WORD *word2 = *(const WORD **) w2;
