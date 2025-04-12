@@ -46,10 +46,12 @@ int main() {
 	printMatrix(r2,c2,mat2);
 
 	char op;
+	double** result;
 	printf("\nenter operation: ");
     scanf(" %c", &op);
-
-	matrix_op(r,c,r2,c2,mat,mat2,op);
+    
+	result = matrix_op(r,c,r2,c2,mat,mat2,op);
+	printMatrix(r2,c2,result);
 	
 	free_matrix(mat, r);
 	free_matrix(mat2, r2);
