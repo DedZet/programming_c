@@ -22,7 +22,7 @@ void free_matrix(double** matrix, int n) {
 }
 
 
-void matrix_op(int r, int c, int r2, int c2, double** mat, double** mat2, char op) {
+double** matrix_op(int r, int c, int r2, int c2, double** mat, double** mat2, char op) {
 	
     double** result = (double**)malloc(r2 * sizeof(double*));
     
@@ -43,10 +43,11 @@ void matrix_op(int r, int c, int r2, int c2, double** mat, double** mat2, char o
         				}
 				}
 				
-				printMatrix(r,c,result);
+				return result;
 			}
 			else {
 				printf("Matrix size error");
+				return NULL;
 			}
 			break;
 			
@@ -60,10 +61,11 @@ void matrix_op(int r, int c, int r2, int c2, double** mat, double** mat2, char o
         				}
 				}
 				
-				printMatrix(r,c,result);
+				return result;
 			}
 			else {
 				printf("Matrix size error");
+				return NULL;
 			}
 			break;
 			
@@ -81,19 +83,19 @@ void matrix_op(int r, int c, int r2, int c2, double** mat, double** mat2, char o
 	    			}
     			}
 				
-				printMatrix(r,c2,result);
+				return result;
 			}
 			else {
-				printf("Matrix size error");
+				return result;
 			}
 			break;
 			
 		default:
 			printf("Not an operation\n");
+			return NULL;
 
 	}
 	
 	free_matrix(result, r2);
 }
 	
-
