@@ -172,7 +172,7 @@ int main() {
     FILE* file = fopen(filename, "r");
     
     if (!file) {
-        printf("Error opening file %s!\n", filename);
+        printf("File opening error");
         return 1;
     }
 
@@ -189,7 +189,9 @@ int main() {
         
         if (len > 0) {
             M++;
-            if (N == 0) N = len;
+            if (N == 0) {
+            	N = len;
+			}
             else if (N != len) {
                 printf("Lines length error\n");
                 fclose(file);
