@@ -15,6 +15,7 @@ typedef struct {
 const int dx[] = {-1, 0, 1, 0};
 const int dy[] = {0, 1, 0, -1};
 
+
 bool canMove(int from, int to, int dir, char** maze, int M, int N) {
 
     int walls_from = 0;
@@ -25,20 +26,32 @@ bool canMove(int from, int to, int dir, char** maze, int M, int N) {
     }
     
     int walls_to = 0;
-    if (maze[to / N][to % N] >= '0' && maze[to / N][to % N] <= '9') {
-        walls_to = maze[to / N][to % N] - '0';
-    } else if (maze[to / N][to % N] >= 'A' && maze[to / N][to % N] <= 'F') {
+    
+    if (maze[to / N][to % N] >= '0' && maze[to / N][to % N] <= '9') 
+	{
+        walls_to = maze[to / N][to % N] - '0';     
+    } 
+	
+////////////////////////////////////////////////////////////////////////////////
+	
+	else if (maze[to / N][to % N] >= 'A' && maze[to / N][to % N] <= 'F') 
+	{
         walls_to = maze[to / N][to % N] - 'A' + 10;
     }
     
-
-    if (dir == 0) { // вверх
+    if (dir == 0) { // up
         if ((walls_from & 1) || (walls_to & 4)) return false;
-    } else if (dir == 1) { // вправо
+    } 
+    
+	else if (dir == 1) { // right
         if ((walls_from & 2) || (walls_to & 8)) return false;
-    } else if (dir == 2) { // вниз
+    } 
+    
+	else if (dir == 2) { // down
         if ((walls_from & 4) || (walls_to & 1)) return false;
-    } else if (dir == 3) { // влево
+    } 
+    
+	else if (dir == 3) { // left
         if ((walls_from & 8) || (walls_to & 2)) return false;
     }
     
@@ -46,12 +59,16 @@ bool canMove(int from, int to, int dir, char** maze, int M, int N) {
 }
 
 void findShortestPath(char** maze, int M, int N) {
+	
     bool** visited = (bool**)malloc(M * sizeof(bool*));
     int** parent = (int**)malloc(M * sizeof(int*));
     int i, j;
+    
     for (i = 0; i < M; i++) {
+    	
         visited[i] = (bool*)calloc(N, sizeof(bool));
         parent[i] = (int*)malloc(N * sizeof(int));
+        
         for (j = 0; j < N; j++) {
             parent[i][j] = -1;
         }
@@ -106,19 +123,24 @@ void findShortestPath(char** maze, int M, int N) {
         
         Point current = end;
         while (!(current.x == 0 && current.y == 0)) {
+        	
             int idx = current.x * N + current.y;
             int p = parent[current.x][current.y];
             if (p == -1) break;
             
             current.x = p / N;
             current.y = p % N;
+            
             if (maze[current.x][current.y] != '0') {
                 maze[current.x][current.y] = '*';
             }
         }
+        
+        
         maze[end.x][end.y] = '*';
 
         FILE* file = fopen("output.txt", "w");
+        
         int i,j;
         for (i = 0; i < M; i++) {
             for (j = 0; j < N; j++) {
@@ -136,20 +158,73 @@ void findShortestPath(char** maze, int M, int N) {
         free(visited[i]);
         free(parent[i]);
     }
+    
     free(visited);
     free(parent);
 }
 
 int main() {
-    int M, N;
-    scanf("%d %d", &M, &N);
+
+    char filename[32];
+    printf("Enter maze filename: ");
+    scanf("%s", filename);
     
+    FILE* file = fopen(filename, "r");
+    
+    if (!file) {
+        printf("Error opening file %s!\n", filename);
+        return 1;
+    }
+
+    int M = 0, N = 0;
+    char line[100];
+
+    while (fgets(line, sizeof(line), file)) {
+
+        size_t len = strlen(line);
+        if (len > 0 && line[len-1] == '\n') {
+            line[len-1] = '\0';
+            len--;
+        }
+        
+        if (len > 0) {
+            M++;
+            if (N == 0) N = len;
+            else if (N != len) {
+                printf("Lines length error\n");
+                fclose(file);
+                return 1;
+            }
+        }
+    }
+    
+    if (M == 0 || N == 0) {
+        printf("Empty maze\n");
+        fclose(file);
+        return 1;
+    }
+    
+    rewind(file);
+    
+
     char** maze = (char**)malloc(M * sizeof(char*));
     int i;
     for (i = 0; i < M; i++) {
+    	
         maze[i] = (char*)malloc((N + 1) * sizeof(char));
-        scanf("%s", maze[i]);
+        if (fgets(line, sizeof(line), file)) {
+        	
+            size_t len = strlen(line);
+            if (len > 0 && line[len-1] == '\n') {
+                line[len-1] = '\0';
+                len--;
+            }
+
+            strncpy(maze[i], line, N);
+            maze[i][N] = '\0';
+        }
     }
+    fclose(file);
     
     findShortestPath(maze, M, N);
     
