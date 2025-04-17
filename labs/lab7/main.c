@@ -1,41 +1,39 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 
-struct Human {
-	char name[16];
-	char surname[16];
-	int year;
-};
+typedef struct  {
+	
+    char name[32];
+    char surname[32];
+    int age;
+    
+} Human;
 
-int main(int argc, char *argv[]) {
-	
-	struct Human humans[4];
-	struct Human sorted[4];
-	
-	strcpy(humans[0].name, "Pavel");
-	strcpy(humans[0].surname, "Ivlev");
-	humans[0].year = 1984;
-	
-	strcpy(humans[1].name, "Pavel");
-	strcpy(humans[1].surname, "Ivlev");
-	humans[1].year = 1980;
-	
-	strcpy(humans[2].name, "Pavel");
-	strcpy(humans[2].surname, "Ivlev");
-	humans[2].year = 1990;
-	
-	strcpy(humans[3].name, "Pavel");
-	strcpy(humans[3].surname, "Ivlev");
-	humans[3].year = 1996;
-	
-	int i;
-	for (i = 0; i < 4; i++) {
-		printf("%d\n", humans[i].year);
-	}
-	
-	
-	
-	//printf("%d", sorted);
-	
-	return 0;
+int compare(Human a, Human b)
+{
+    return a.age - b.age;
+}
+
+int main() {
+    
+    Human input[4];
+    Human sorted[4];
+    
+    int i, j;
+    for (i = 0; i < 4; i++) {
+        printf("Enter Human %d ", i + 1);
+        scanf("%s %s %d", &input[i].name, &input[i].surname, &input[i].age);
+    }
+    
+    memcpy(sorted, input, sizeof(input));
+
+    int humanbuff = sizeof(input)/sizeof(input[0]);
+    qsort(input, humanbuff, sizeof(Human), compare);
+    
+    printf("\nSorted humans:\n");
+    for (i = 0; i < 4; i++) {
+        printf("%s %s, %d\n", sorted[i].name, sorted[i].surname, sorted[i].age);
+    }
+    
+    return 0;
 }
