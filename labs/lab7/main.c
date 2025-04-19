@@ -10,9 +10,20 @@ typedef struct  {
     
 } Human;
 
-int compare(Human a, Human b)
-{
-    return abs(a.age - b.age);
+void swap(Human hum[], int i, int j) {
+    Human temp = hum[i];
+    hum[i] = hum[j];
+    hum[j] = temp;
+}
+
+void bubbleSort(Human hum[], int size) {
+    int i,j;
+    for (i = 0; i < size - 1; i++) {
+        for (j = 0; j < size - i - 1; j++) {
+            if (hum[j].age > hum[j + 1].age)
+                swap(hum, j, j + 1);
+        }
+    }
 }
 
 int main() {
@@ -28,8 +39,8 @@ int main() {
     
     memcpy(sorted, input, sizeof(input));
 
-    int len = sizeof(input) / sizeof(input[0]);
-    qsort(input, len, sizeof(Human), compare);
+	bubbleSort(sorted, 4);
+
     
     printf("\nSorted humans:\n");
     for (i = 0; i < 4; i++) {
