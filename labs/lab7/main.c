@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 typedef struct  {
 	
@@ -11,7 +12,7 @@ typedef struct  {
 
 int compare(Human a, Human b)
 {
-    return a.age - b.age;
+    return abs(a.age - b.age);
 }
 
 int main() {
@@ -27,8 +28,8 @@ int main() {
     
     memcpy(sorted, input, sizeof(input));
 
-    int humanbuff = sizeof(input)/sizeof(input[0]);
-    qsort(input, humanbuff, sizeof(Human), compare);
+    int len = sizeof(input) / sizeof(input[0]);
+    qsort(input, len, sizeof(Human), compare);
     
     printf("\nSorted humans:\n");
     for (i = 0; i < 4; i++) {
