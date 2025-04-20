@@ -56,7 +56,7 @@ void swap(int arr[], int i, int j) {
     arr[j] = temp;
 }
 
-int isvowel(char c) {// DOESNT WORK FOR CYRILLIC 
+int isvowel(char c) { // DOESNT WORK FOR CYRILLIC 
 	switch(tolower(c)) {
 		case 'a': 
 		case 'e':
@@ -91,11 +91,6 @@ int main(int argc, char *argv[]) {
 	
 	//double** mat = create_dyn_matrix(2,2);
 	//memcpy(sorted, input, sizeof(input)); // copy array from-to
-	
-	
-	
-
-
 	
 	return 0;
 }
