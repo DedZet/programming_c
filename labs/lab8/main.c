@@ -5,72 +5,64 @@
 
 
 typedef struct {
+	
 	char name[32];
 	char surname[32];
 	int year;
-	char gen;
+	char gender;
 	float height;
+	
 } Human;
 
-int compare(Human a, Human b)
-{
-    return a.year - b.year;
+void swap(Human hum[], int i, int j) {
+    Human temp = hum[i];
+    hum[i] = hum[j];
+    hum[j] = temp;
+}
+
+void bubble_sort(Human hum[], int size) {
+    int i,j;
+    for (i = 0; i < size - 1; i++) {
+        for (j = 0; j < size - i - 1; j++) {
+            if (hum[j].year > hum[j + 1].year)
+                swap(hum, j, j + 1);
+        }
+    }
 }
 
 int main(int argc, char *argv[]) {
 	
 	SetConsoleOutputCP(CP_UTF8);
 	
-	Human humans[4];
-    Human sorted[4];
+//	Human* humans = (Human*) malloc(4*sizeof(Human));
+//    Human* sorted = (Human*) malloc(4*sizeof(Human));
+    
+    int size = 16;
+    Human humans[size];
+    Human sorted[size];
 	
-	FILE *names = fopen("names.txt","r");
-	
-	FILE *sorted_year = fopen("out_year.txt","w");
-	FILE *sorted_names = fopen("out_names.txt","w");
-	FILE *sorted_surnames = fopen("out_surnames.txt","w");
-	FILE *sorted_gen = fopen("out_gen.txt","w");
-	FILE *sorted_height = fopen("out_height.txt","w");
+	FILE *namesfile = fopen("names.txt","r");
 		
-	if (names == NULL) {
+	if (namesfile == NULL) {
 		printf("File opening error");
-		fclose(names);
+		return 1;
 	}
 	
-	int year;
-	char line[256], name[32], surname[32];
-	char gen;
-	float height;
 	
-	while (fgets(line, sizeof(line), names)) {
 	
-        if (sscanf(line, "%s %s %d %c %f", name, surname, &year, &gen, &height) == 5) {
-            printf("%s %s %d %c %f\n", name, surname, year, gen, height);
-                
-            int i, j;
-    		for (i = 0; i < 4; i++) {
-        		humans[i].name[32] = name;
-				humans[i].surname[32] = surname;
-				humans[i].year = year;
-				humans[i].gen = gen;
-				humans[i].height = height;
-    
-			} 
-        }
-    }        
-    
-    int i;
-    for (i = 0; i < 6; i++) {
-        printf("%s %s %d %c %f\n", humans[i].name, humans[i].surname, humans[i].year, humans[i].gen, humans[i].height);
+	int i;
+    for (i = 0; i < size; i++) {
+        fscanf(namesfile, "%s %s %d %c %f", humans[i].name, humans[i].surname, &humans[i].year, &humans[i].gender, &humans[i].height);
     }
-	
-	
-	
-//	memcpy(sorted, humans, sizeof(humans));
-//	
-//    int humanbuff = sizeof(humans)/sizeof(humans[0]);
-//    qsort(humans, humanbuff, sizeof(Human), compare);
-	
+    
+
+	memcpy(sorted, humans, sizeof(humans));
+	bubble_sort(sorted, size);
+
+         
+    for (i = 0; i < size; i++) {
+        printf("%s %s %d %c %.2f\n", sorted[i].name, sorted[i].surname, sorted[i].year, sorted[i].gender, sorted[i].height);
+    }
 	
 	
 	return 0;
