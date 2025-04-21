@@ -3,11 +3,12 @@
 #include <locale.h>
 #include <windows.h>
 
+
 typedef struct {
 	char name[32];
 	char surname[32];
 	int year;
-	char sex;
+	char gen;
 	float height;
 } Human;
 
@@ -20,12 +21,15 @@ int main(int argc, char *argv[]) {
 	
 	SetConsoleOutputCP(CP_UTF8);
 	
+	Human humans[4];
+    Human sorted[4];
+	
 	FILE *names = fopen("names.txt","r");
 	
 	FILE *sorted_year = fopen("out_year.txt","w");
 	FILE *sorted_names = fopen("out_names.txt","w");
 	FILE *sorted_surnames = fopen("out_surnames.txt","w");
-	FILE *sorted_sex = fopen("out_sex.txt","w");
+	FILE *sorted_gen = fopen("out_gen.txt","w");
 	FILE *sorted_height = fopen("out_height.txt","w");
 		
 	if (names == NULL) {
@@ -35,20 +39,37 @@ int main(int argc, char *argv[]) {
 	
 	int year;
 	char line[256], name[32], surname[32];
-	char sex;
+	char gen;
 	float height;
 	
-	while (putchar(names) != EOF) {
+	while (fgets(line, sizeof(line), names)) {
 	
-            if (fscanf(names, "%s", name) == 1) {
-                //fprintf(sorted_sex, "%s %s %d %c %lf", name, surname, year, sex, height);
-                printf("%s", name);
+        if (sscanf(line, "%s %s %d %c %f", name, surname, &year, &gen, &height) == 5) {
+            printf("%s %s %d %c %f\n", name, surname, year, gen, height);
                 
-                //printf("%s %s %d %c %lf\n", name, surname, year, sex, height);
+            int i, j;
+    		for (i = 0; i < 4; i++) {
+        		humans[i].name[32] = name;
+				humans[i].surname[32] = surname;
+				humans[i].year = year;
+				humans[i].gen = gen;
+				humans[i].height = height;
+    
+			} 
         }
-}
+    }        
+    
+    int i;
+    for (i = 0; i < 6; i++) {
+        printf("%s %s %d %c %f\n", humans[i].name, humans[i].surname, humans[i].year, humans[i].gen, humans[i].height);
+    }
 	
-	//qsort();
+	
+	
+//	memcpy(sorted, humans, sizeof(humans));
+//	
+//    int humanbuff = sizeof(humans)/sizeof(humans[0]);
+//    qsort(humans, humanbuff, sizeof(Human), compare);
 	
 	
 	
