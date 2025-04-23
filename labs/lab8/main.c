@@ -3,6 +3,8 @@
 #include <locale.h>
 #include <windows.h>
 
+#define GLSIZE 6
+
 typedef struct {
 	char name[32];
 	char surname[32];
@@ -17,9 +19,9 @@ void swap(Human hum[], int i, int j) {
     hum[j] = temp;
 }
 
-void read_file(FILE *filename, Human hums[], int fsize) {
+void read_file(FILE *filename, Human hums[]) {
 	int c = 0;
-    while (c < fsize && fscanf(filename, "%s %s %d %c %f", 
+    while (c < GLSIZE && fscanf(filename, "%s %s %d %c %f", 
 	hums[c].name, hums[c].surname, &hums[c].year, &hums[c].gender, &hums[c].height) == 5) {	
         c++;
     }
@@ -48,8 +50,6 @@ void bsort_height(Human hum[], int size) {
     }
 }
 
-
-
 int compare_name(Human a, Human b) {
 	return strcmp(a.name, b.name);
 }
@@ -59,53 +59,50 @@ int compare_surname(Human a, Human b) {
 }
 
 int compare_gender(Human a, Human b) {
-	if( a.gender < b.gender ) printf("%c is smaller than %c", a, b);
-	if( a.gender > b.gender ) printf("%c is smaller than %c", a, b);
-	if( a.gender == b.gender ) printf("%c is equal to %c", a, b);
+	if( a.gender < b.gender ) return -1;
+	if( a.gender > b.gender ) return 1;
+	if( a.gender == b.gender ) return 0;
 	return 0;
 }
 
 ///////////////////////////////////////////////////////////////
-
-
 	
-void logic(Human hum[], char chose) {
+Human *operations(Human hum[], char chose) {
 	
-	int i = 0;
-	Human hum_a = hum[i];
-	Human hum_b = hum[i+1];
-	
-	scanf("%c", &chose);
 	int result = 0;
 	
 	switch (chose) {
 		case 'n': // name
-			
+			qsort(hum, GLSIZE, sizeof(Human), compare_name);
 			break;
 			
 		case 's': // surname
-			
+			qsort(hum, GLSIZE, sizeof(Human), compare_surname);
 			break;
 			
 		case 'y': // year
-			//bsort_year(hum, size);
+			bsort_year(hum, GLSIZE); 
 			
 		case 'g': // gender
-			// result = strcmp(a.gender, b.gender);
+			qsort(hum, GLSIZE, sizeof(Human), compare_gender);
 			break;
 			
 		case 'h': // height
-		break;
+			bsort_height(hum, GLSIZE);
+			break;
+		default:
+			printf("not an operation");
+			return NULL;
 	}
+	return hum;
 }
 
 int main(int argc, char *argv[]) {
 	
 	SetConsoleOutputCP(CP_UTF8);
 	
-    int size = 6;
-    Human humans[size];
-    Human sorted[size];
+    Human humans[GLSIZE];
+    Human sorted[GLSIZE];
 	
 	FILE *namesfile = fopen("names.txt","r");
 		
@@ -114,15 +111,26 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 	
-	read_file(namesfile, humans, size);
+	read_file(namesfile, humans);
 
 	memcpy(sorted, humans, sizeof(humans));
 	
-	//bubble_sort(sorted, size);
+	printf("Enter filter (n,s,y,g,h) ");
+	char chose;
+	scanf("%c", &chose);
+	
+	Human *copy = operations(sorted, chose);
+	
+	if (copy == NULL) {
+		fclose(namesfile);
+		return 1;
+	}
+	
+	system("cls");
 	
 	int i;
-    for (i = 0; i < size; i++) {
-        printf("%s %s %d %c %.2f\n", sorted[i].name, sorted[i].surname, sorted[i].year, sorted[i].gender, sorted[i].height);
+    for (i = 0; i < GLSIZE; i++) {
+        printf("%s %s %d %c %.2f\n", copy[i].name, copy[i].surname, copy[i].year, copy[i].gender, copy[i].height);
     }
 	
 	
