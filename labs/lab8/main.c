@@ -19,7 +19,7 @@ void swap(Human hum[], int i, int j) {
     hum[j] = temp;
 }
 
-void read_file(FILE *filename, Human hums[]) {
+void rw_file(FILE *filename, Human hums[]) {
 	int c = 0;
     while (c < GLSIZE && fscanf(filename, "%s %s %d %c %f", 
 	hums[c].name, hums[c].surname, &hums[c].year, &hums[c].gender, &hums[c].height) == 5) {	
@@ -62,14 +62,11 @@ int compare_gender(Human a, Human b) {
 	if( a.gender < b.gender ) return -1;
 	if( a.gender > b.gender ) return 1;
 	if( a.gender == b.gender ) return 0;
-	return 0;
 }
 
 ///////////////////////////////////////////////////////////////
 	
 Human *operations(Human hum[], char chose) {
-	
-	int result = 0;
 	
 	switch (chose) {
 		case 'n': // name
@@ -81,7 +78,8 @@ Human *operations(Human hum[], char chose) {
 			break;
 			
 		case 'y': // year
-			bsort_year(hum, GLSIZE); 
+			bsort_year(hum, GLSIZE);
+			break;
 			
 		case 'g': // gender
 			qsort(hum, GLSIZE, sizeof(Human), compare_gender);
@@ -90,6 +88,7 @@ Human *operations(Human hum[], char chose) {
 		case 'h': // height
 			bsort_height(hum, GLSIZE);
 			break;
+			
 		default:
 			printf("not an operation");
 			return NULL;
@@ -103,6 +102,7 @@ int main(int argc, char *argv[]) {
 	
     Human humans[GLSIZE];
     Human sorted[GLSIZE];
+    char chose;
 	
 	FILE *namesfile = fopen("names.txt","r");
 		
@@ -111,12 +111,11 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 	
-	read_file(namesfile, humans);
+	rw_file(namesfile, humans);
 
 	memcpy(sorted, humans, sizeof(humans));
 	
 	printf("Enter filter (n,s,y,g,h) ");
-	char chose;
 	scanf("%c", &chose);
 	
 	Human *copy = operations(sorted, chose);
@@ -132,7 +131,6 @@ int main(int argc, char *argv[]) {
     for (i = 0; i < GLSIZE; i++) {
         printf("%s %s %d %c %.2f\n", copy[i].name, copy[i].surname, copy[i].year, copy[i].gender, copy[i].height);
     }
-	
 	
 	return 0;
 }
