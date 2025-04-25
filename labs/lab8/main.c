@@ -88,6 +88,9 @@ Human *operations(Human hum[], char chose) {
 		case 'h': // height
 			bsort_height(hum, GLSIZE);
 			break;
+
+		case '-' // anti name
+			break;
 			
 		default:
 			printf("not an operation");
