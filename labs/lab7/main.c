@@ -47,16 +47,13 @@ int main() {
         }
     }
     
-    fclose(inputfile);
-    
 	Human input[count];
     Human sorted[count];
+    
+    rewind(inputfile);
 
     int i;
-    
-    char buffer[100];
     for (i = 0; i < count; i++) {
-    	fgets(buffer, sizeof(buffer), inputfile);
         fscanf(inputfile, "%s %s %d", input[i].name, input[i].surname, &input[i].year);
     }
     
