@@ -58,9 +58,15 @@ int compare_surname(Human a, Human b) {
 	return strcmp(a.surname, b.surname);
 }
 
-int compare_gender(Human a, Human b) {
+int compare_genf(Human a, Human b) {
 	if( a.gender < b.gender ) return -1;
 	if( a.gender > b.gender ) return 1;
+	if( a.gender == b.gender ) return 0;
+}
+
+int compare_genm(Human a, Human b) {
+	if( a.gender < b.gender ) return 1;
+	if( a.gender > b.gender ) return -1;
 	if( a.gender == b.gender ) return 0;
 }
 
@@ -81,15 +87,16 @@ Human *operations(Human hum[], char chose) {
 			bsort_year(hum, GLSIZE);
 			break;
 			
-		case 'g': // gender
-			qsort(hum, GLSIZE, sizeof(Human), compare_gender);
+		case 'f': // gender f
+			qsort(hum, GLSIZE, sizeof(Human), compare_genf);
+			break;
+			
+		case 'm': // gender m
+			qsort(hum, GLSIZE, sizeof(Human), compare_genm);
 			break;
 			
 		case 'h': // height
 			bsort_height(hum, GLSIZE);
-			break;
-
-		case '-' // anti name
 			break;
 			
 		default:
@@ -118,7 +125,7 @@ int main(int argc, char *argv[]) {
 
 	memcpy(sorted, humans, sizeof(humans));
 	
-	printf("Enter filter (n,s,y,g,h) ");
+	printf("Enter filter (n,s,y,f,m,h) ");
 	scanf("%c", &chose);
 	
 	Human *copy = operations(sorted, chose);
