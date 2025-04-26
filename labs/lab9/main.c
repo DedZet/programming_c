@@ -1,36 +1,75 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 
-int main(int argc, char *argv[]) {
+double eval(char *urav) {
 	
-	int sign(char* str, int i) {
-		
-		if (i < 0 || i >= strlen(str)) return 1;
-		if (str[i] == '-') return -1;
-    	else return 1;
+    char *exp;
+    double result = 0.0;
+    double num;
+    int negative = 0;
+    char *endptr;
 
-	}
-	
-	//char exp[64];
-	double result = 0.0;
-	
-	//printf("Enter expression: ");
-	//scanf("%s", exp);
-	
-	//char* ops = strtok(exestr, "0123456789.");
-	
-	char exestr[64] = "-120+20+60-212+26";
-    char* exp = strtok(exestr, "+-"); 
+    exp = strtok(urav, " +-");
     
-	int i = 0;
-    while (exp != NULL) {
+    if (exp[0] == '-') {
+        negative = 1;
+    }
+
+    if (exp != NULL) {
     	
-        	double num = strtod(exp, NULL);
-        	
-        	printf("%.2lf\n", sign(exestr,i)*num);
-        	exp = strtok(NULL, "+-");
-        	i++;
+        num = strtod(exp, &endptr);
+        if (negative) result *= -1;
+		else  result = result;
+		
+    }
+
+    while ((exp = strtok(NULL, " +-")) != NULL) {
+    }
+
+    result = 0.0;
+    char *ptr = exp;
+    int sign = 1;
+    
+    while (*ptr) {
+        if (*ptr == ' ') {
+            ptr++;
+            continue;
         }
         
-        return 0;
-    }	
+        if (*ptr == '+') {
+            sign = 1;
+            ptr++;
+        } else if (*ptr == '-') {
+            sign = -1;
+            ptr++;
+        }
+        
+        while (*ptr == ' ') ptr++;
+        
+        num = strtod(ptr, &endptr);
+        if (ptr == endptr) {
+            printf("Error nan\n");
+            exit(1);
+        }
+        
+        result += sign * num;
+        ptr = endptr;
+    }
+    
+    return result;
+}
+
+int main() {
+    char expression[64];
+    
+    //printf("Enter expression: ");
+    
+    char* test = "120+30-20-5.5";
+    
+    double result = eval(test);
+    printf("Result: %.2lf\n", result);
+    
+    return 0;
+}
