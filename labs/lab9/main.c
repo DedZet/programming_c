@@ -1,11 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* run this program using the console pauser or add your own getch, system("pause") or input loop */
-
 int main(int argc, char *argv[]) {
 	
-	char exp[64];
+	int sign(char* str, int i) {
+		
+		if (i < 0 || i >= strlen(str)) return 1;
+		if (str[i] == '-') return -1;
+    	else return 1;
+
+	}
+	
+	//char exp[64];
 	double result = 0.0;
 	
 	//printf("Enter expression: ");
@@ -14,13 +20,17 @@ int main(int argc, char *argv[]) {
 	//char* ops = strtok(exestr, "0123456789.");
 	
 	char exestr[64] = "-120+20+60-212+26";
-	
-	char* nums = strtok(exestr, "+");
-	
-	while (nums != NULL) {
-		printf("%.2lf\n", strtod(nums, NULL));
-		nums = strtok(NULL, "+");
-	}
-	
-	return 0;	
-}
+    char* exp = strtok(exestr, "+-"); 
+    
+	int i = 0;
+    while (exp != NULL) {
+    	
+        	double num = strtod(exp, NULL);
+        	
+        	printf("%.2lf\n", sign(exestr,i)*num);
+        	exp = strtok(NULL, "+-");
+        	i++;
+        }
+        
+        return 0;
+    }	
