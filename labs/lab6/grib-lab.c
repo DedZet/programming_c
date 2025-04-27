@@ -10,23 +10,22 @@ int isa(const char *str) {
 
 int main(int argc, char *argv[]) {
 	
-	FILE *namedb, *output;
+	//setlocale(LC_ALL, "");
 	
-	namedb = fopen("namedb.txt", "r");
-	output = fopen("output.txt", "w");
-	//output_surname = fopen("output_surname.txt", "w");
+	FILE *namedb = fopen("namedb.txt", "r");
+	FILE *output = fopen("output.txt", "w");
 	
 	SetConsoleOutputCP(CP_UTF8);
 	setlocale(LC_ALL, "UTF-8");
 
 	int year;
-	char line[256], surname[50], name[50], surname2[50];
+	char line[256], name[50], surname[50], surname2[50];
 	
     while (fgets(line, sizeof(line), namedb))
     {
         if (sscanf(line, "%s %s %s %d", surname, name, surname2, &year) == 4) {
             //if (year > 1980) {
-            if (isa(surname)) {
+            if (strncmp(surname, "À", 2) == 0) {
                 fprintf(output, "%s %s %s %d\n", surname, name, surname2, year);
                 printf("%s %s %s %d\n", surname, name, surname2, year);
             }
@@ -38,4 +37,3 @@ int main(int argc, char *argv[]) {
 	
 	return 0;
 }
-
