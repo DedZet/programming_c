@@ -76,23 +76,23 @@ Human *operations(Human hum[], char chose[]) {
 	
 	///////////// NOT COMBINED FILTERS /////////////
 	
-		if (chose == "nn") { // name
-			qsort(hum, GLSIZE, sizeof(Human), compare_name);}
+		if (strncmp(chose, "nn", 2) == 0)  // name
+			qsort(hum, GLSIZE, sizeof(Human), compare_name);
 			
-		if (chose == "ss") { // surname
-			qsort(hum, GLSIZE, sizeof(Human), compare_surname);}
+		else if (strncmp(chose, "ss", 2) == 0) // surname
+			qsort(hum, GLSIZE, sizeof(Human), compare_surname);
 		
-		if (chose == "yy") { // year
-			bsort_year(hum, GLSIZE);}
+		else if (strncmp(chose, "yy", 2) == 0) // year
+			bsort_year(hum, GLSIZE);
 		
-		if (chose == "ff") { // gender f
-			qsort(hum, GLSIZE, sizeof(Human), compare_genf);}
+		else if (strncmp(chose, "ff", 2) == 0) // gender f
+			qsort(hum, GLSIZE, sizeof(Human), compare_genf);
 		
-		if (chose == "mm") { // gender m
-			qsort(hum, GLSIZE, sizeof(Human), compare_genm);}
+		else if (strncmp(chose, "mm", 2) == 0) // gender m
+			qsort(hum, GLSIZE, sizeof(Human), compare_genm);
 		
-		if (chose == "hh") { // height
-			bsort_height(hum, GLSIZE);}
+		else if (strncmp(chose, "hh", 2) == 0) // height
+			bsort_height(hum, GLSIZE);
 		
 		/////////////// COMBINED FILTERS ///////////////
 		
@@ -105,12 +105,14 @@ Human *operations(Human hum[], char chose[]) {
 		
 		
 		
-		//////////////////// NULL /////////////////////
+		////////////////// RETURNS ///////////////////
 		
 		else {
 			printf("not an operation");
-				return NULL;
-		}			
+			return NULL;
+		}
+		
+	return hum;
 }
 	
 
@@ -133,7 +135,7 @@ int main(int argc, char *argv[]) {
 
 	memcpy(sorted, humans, sizeof(humans));
 	
-	printf("Enter filter (n,s,y,f,m,h) ");
+	printf("Enter filters (n,s,y,f,m,h) ");
 	scanf("%2s", chose);
 	
 	Human *copy = operations(sorted, chose);
