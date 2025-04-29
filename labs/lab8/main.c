@@ -3,7 +3,7 @@
 #include <locale.h>
 #include <windows.h>
 
-#define GLSIZE 6
+#define GLSIZE 16
 
 typedef struct {
 	char name[32];
@@ -74,25 +74,29 @@ int compare_genm(Human a, Human b) {
 	
 Human *operations(Human hum[], char chose[]) {
 	
+	Human buffer[GLSIZE];
+	
 	///////////// NOT COMBINED FILTERS /////////////
 	
-		if (strncmp(chose, "nn", 2) == 0)  // name
-			qsort(hum, GLSIZE, sizeof(Human), compare_name);
-			
-		else if (strncmp(chose, "ss", 2) == 0) // surname
-			qsort(hum, GLSIZE, sizeof(Human), compare_surname);
+	if (strncmp(chose, "nn", 2) == 0) {  // name // NF test
+		qsort(hum, GLSIZE, sizeof(Human), compare_genf);
+		qsort(hum, GLSIZE, sizeof(Human), compare_name);
+	}
+	
+	else if (strncmp(chose, "ss", 2) == 0) // surname
+		qsort(hum, GLSIZE, sizeof(Human), compare_surname);
 		
-		else if (strncmp(chose, "yy", 2) == 0) // year
-			bsort_year(hum, GLSIZE);
+	else if (strncmp(chose, "yy", 2) == 0) // year
+		bsort_year(hum, GLSIZE);
 		
-		else if (strncmp(chose, "ff", 2) == 0) // gender f
-			qsort(hum, GLSIZE, sizeof(Human), compare_genf);
+	else if (strncmp(chose, "ff", 2) == 0) // gender f
+		qsort(hum, GLSIZE, sizeof(Human), compare_genf);
 		
-		else if (strncmp(chose, "mm", 2) == 0) // gender m
-			qsort(hum, GLSIZE, sizeof(Human), compare_genm);
+	else if (strncmp(chose, "mm", 2) == 0) // gender m
+		qsort(hum, GLSIZE, sizeof(Human), compare_genm);
 		
-		else if (strncmp(chose, "hh", 2) == 0) // height
-			bsort_height(hum, GLSIZE);
+	else if (strncmp(chose, "hh", 2) == 0) // height
+		bsort_height(hum, GLSIZE);
 		
 		/////////////// COMBINED FILTERS ///////////////
 		
