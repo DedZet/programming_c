@@ -72,39 +72,47 @@ int compare_genm(Human a, Human b) {
 
 ///////////////////////////////////////////////////////////////
 	
-Human *operations(Human hum[], char chose) {
+Human *operations(Human hum[], char chose[]) {
 	
-	switch (chose) {
-		case 'n': // name
-			qsort(hum, GLSIZE, sizeof(Human), compare_name);
-			break;
+	///////////// NOT COMBINED FILTERS /////////////
+	
+		if (chose == "nn") { // name
+			qsort(hum, GLSIZE, sizeof(Human), compare_name);}
 			
-		case 's': // surname
-			qsort(hum, GLSIZE, sizeof(Human), compare_surname);
-			break;
-			
-		case 'y': // year
-			bsort_year(hum, GLSIZE);
-			break;
-			
-		case 'f': // gender f
-			qsort(hum, GLSIZE, sizeof(Human), compare_genf);
-			break;
-			
-		case 'm': // gender m
-			qsort(hum, GLSIZE, sizeof(Human), compare_genm);
-			break;
-			
-		case 'h': // height
-			bsort_height(hum, GLSIZE);
-			break;
-			
-		default:
+		if (chose == "ss") { // surname
+			qsort(hum, GLSIZE, sizeof(Human), compare_surname);}
+		
+		if (chose == "yy") { // year
+			bsort_year(hum, GLSIZE);}
+		
+		if (chose == "ff") { // gender f
+			qsort(hum, GLSIZE, sizeof(Human), compare_genf);}
+		
+		if (chose == "mm") { // gender m
+			qsort(hum, GLSIZE, sizeof(Human), compare_genm);}
+		
+		if (chose == "hh") { // height
+			bsort_height(hum, GLSIZE);}
+		
+		/////////////// COMBINED FILTERS ///////////////
+		
+		//if (chose)
+		
+		
+		
+		
+		
+		
+		
+		
+		//////////////////// NULL /////////////////////
+		
+		else {
 			printf("not an operation");
-			return NULL;
-	}
-	return hum;
+				return NULL;
+		}			
 }
+	
 
 int main(int argc, char *argv[]) {
 	
@@ -112,7 +120,7 @@ int main(int argc, char *argv[]) {
 	
     Human humans[GLSIZE];
     Human sorted[GLSIZE];
-    char chose;
+    char chose[3];
 	
 	FILE *namesfile = fopen("names.txt","r");
 		
@@ -126,7 +134,7 @@ int main(int argc, char *argv[]) {
 	memcpy(sorted, humans, sizeof(humans));
 	
 	printf("Enter filter (n,s,y,f,m,h) ");
-	scanf("%c", &chose);
+	scanf("%2s", chose);
 	
 	Human *copy = operations(sorted, chose);
 	
