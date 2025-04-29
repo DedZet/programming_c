@@ -11,32 +11,20 @@
     } \
     max; \
 })
-	
 
 int main(int argc, char *argv[]) {
 	
-	char input[32];
-
-    int* numbers = (int*)malloc(4 * sizeof(int*));
+    int numbers[32];
+    int count = 0;
     
     printf("Enter nums: ");
-    scanf("%s", input);
+
+	while (scanf("%d", &numbers[count]) == 1 && getchar() != '\n') {
+        count++;
+    }
     
-//    char* exp = strtok(input, " "); 
-//    
-//    while (exp != NULL) {
-//        	int num = strtok(exp, NULL);
-//        	int size = sizeof(numbers)/sizeof(numbers[0]);
-//        	numbers[size] = num;
-//        	exp = strtok(NULL, " ");
-//        }
-    
-    printf("%s", input);
-    
-    //int size = sizeof(numbers)/sizeof(numbers[0]);
-//    int result = FIND_MAX(numbers, size);
-//    
-//    printf("Max: %d", result);
+    int result = FIND_MAX(numbers, count);
+    printf("Max: %d", result);
     
 	return 0;
 }
