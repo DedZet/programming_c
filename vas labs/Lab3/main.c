@@ -4,167 +4,235 @@
 #include <ctype.h>
 #include <iconv.h>
 
-#define MAX_ENTRY_LENGTH 1024
-#define MAX_FIELD_LENGTH 256
-#define COMPARE_LENGTH 5
+#define MAX_LINE 1024
+#define MAX_FIELD 256
+#define COMPARE_LEN 5
 
-struct bib_entry {
-    char author[MAX_FIELD_LENGTH];
-    char title[MAX_FIELD_LENGTH];
-    char publisher[MAX_FIELD_LENGTH];
-    char year[MAX_FIELD_LENGTH];
-    char full_entry[MAX_ENTRY_LENGTH];
-};
+typedef struct Book {
+    char author[MAX_FIELD];
+    char title[MAX_FIELD];
+    char publisher[MAX_FIELD];
+    int year;
+    struct Book *left;
+    struct Book *right;
+} Book;
 
-struct tnode {
-    struct bib_entry entry;
-    struct tnode *lchild, *rchild;
-};
-
-int strncmp_cp1251(const char *s1, const char *s2, size_t n) {
-    for (size_t i = 0; i < n; i++) {
-        if (s1[i] != s2[i]) {
-            char c1 = tolower((unsigned char)s1[i]);
-            char c2 = tolower((unsigned char)s2[i]);
-            if (c1 != c2) {
-                return c1 - c2;
-            }
-        }
-        if (s1[i] == '\0' || s2[i] == '\0') {
-            break;
-        }
+Book* createBook(const char *author, const char *title, const char *publisher, int year) {
+    Book *newBook = (Book*)malloc(sizeof(Book));
+    if (newBook == NULL) {
+        exit(1);
     }
-    return 0;
+    
+    strncpy(newBook->author, author, MAX_FIELD - 1);
+    newBook->author[MAX_FIELD - 1] = '\0';
+    strncpy(newBook->title, title, MAX_FIELD - 1);
+    newBook->title[MAX_FIELD - 1] = '\0';
+    strncpy(newBook->publisher, publisher, MAX_FIELD - 1);
+    newBook->publisher[MAX_FIELD - 1] = '\0';
+    newBook->year = year;
+    newBook->left = NULL;
+    newBook->right = NULL;
+    
+    return newBook;
 }
 
-struct tnode *tree_insert(struct tnode *p, struct bib_entry entry) {
-    if (p == NULL) {
-        p = (struct tnode *)malloc(sizeof(struct tnode));
-        if (p == NULL) {
-            printf("Cannot allocate memory\n");
-            exit(1);
-        }
-        p->entry = entry;
-        p->lchild = p->rchild = NULL;
-        return p;
-    }
-
-    int cmp_author = strncmp_cp1251(entry.author, p->entry.author, COMPARE_LENGTH);
-    if (cmp_author < 0) {
-        p->lchild = tree_insert(p->lchild, entry);
-    } 
-    else if (cmp_author > 0) {
-        p->rchild = tree_insert(p->rchild, entry);
-    } 
-    else {
-
-        int cmp_title = strncmp_cp1251(entry.title, p->entry.title, COMPARE_LENGTH);
-        if (cmp_title < 0) {
-            p->lchild = tree_insert(p->lchild, entry);
-        } 
-        else if (cmp_title > 0) {
-            p->rchild = tree_insert(p->rchild, entry);
-        } 
-        else {
-
-            int cmp_year = strcmp(entry.year, p->entry.year);
-            if (cmp_year < 0) {
-                p->lchild = tree_insert(p->lchild, entry);
-            } 
-            else {
-                p->rchild = tree_insert(p->rchild, entry);
-            }
-        }
-    }
-    return p;
+int compareStrings(const char *s1, const char *s2) {
+    return strncmp(s1, s2, COMPARE_LEN);
 }
 
-void tree_print(struct tnode *p, FILE *output) {
-    if (p != NULL) {
-        tree_print(p->lchild, output);
-        fprintf(output, "%s\n", p->entry.full_entry);
-        tree_print(p->rchild, output);
+Book* insertBook(Book *root, Book *newBook) {
+    if (root == NULL) {
+        return newBook;
+    }
+    
+    int cmp = compareStrings(newBook->author, root->author);
+    if (cmp < 0) {
+        root->left = insertBook(root->left, newBook);
+    } else if (cmp > 0) {
+        root->right = insertBook(root->right, newBook);
+    } else {
+        
+        cmp = compareStrings(newBook->title, root->title);
+        if (cmp < 0) {
+            root->left = insertBook(root->left, newBook);
+        } else {
+            root->right = insertBook(root->right, newBook);
+        }
+    }
+    
+    return root;
+}
+
+void freeTree(Book *root) {
+    if (root != NULL) {
+        freeTree(root->left);
+        freeTree(root->right);
+        free(root);
     }
 }
 
-void tree_free(struct tnode *p) {
-    if (p != NULL) {
-        tree_free(p->lchild);
-        tree_free(p->rchild);
-        free(p);
+void writeTreeToFile(FILE *output, Book *root) {
+    if (root != NULL) {
+        writeTreeToFile(output, root->left);
+        fprintf(output, "Author: %s\n", root->author);
+        fprintf(output, "Title: %s\n", root->title);
+        fprintf(output, "Publisher: %s\n", root->publisher);
+        fprintf(output, "Year: %d\n\n", root->year);
+        writeTreeToFile(output, root->right);
     }
 }
 
-void parse_bib_file(FILE *file, struct tnode **root) {
-    char line[MAX_ENTRY_LENGTH];
-    struct bib_entry current_entry = {0};
-    int in_entry = 0;
-    char *entry_start = NULL;
+void searchInTree(Book *root, const char *searchStr) {
+    if (root == NULL) {
+        return;
+    }
+    
+    int cmp = compareStrings(searchStr, root->author);
+    if (cmp == 0) {
+        printf("Found: %s - %s\n", root->author, root->title);
+    }
+    
+    cmp = compareStrings(searchStr, root->title);
+    if (cmp == 0) {
+        printf("Found: %s - %s\n", root->author, root->title);
+    }
+    
+    if (compareStrings(searchStr, root->author) <= 0 || compareStrings(searchStr, root->title) <= 0) {
+        searchInTree(root->left, searchStr);
+    }
+    
+    if (compareStrings(searchStr, root->author) >= 0 || compareStrings(searchStr, root->title) >= 0) {
+        searchInTree(root->right, searchStr);
+    }
+}
 
-    while (fgets(line, sizeof(line), file)) {
-        if (line[0] == '%' || line[0] == '\n') continue;
+void processBibFile(const char *filename, Book **root) {
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        fprintf(stderr, "Openning file error: %s\n", filename);
+        return;
+    }
+    
+    char line[MAX_LINE];
+    char currentAuthor[MAX_FIELD] = "";
+    char currentTitle[MAX_FIELD] = "";
+    char currentPublisher[MAX_FIELD] = "";
+    int currentYear = 0;
+    
+    while (fgets(line, MAX_LINE, file) != NULL) {
 
-        if (line[0] == '@') {
-            if (in_entry && entry_start != NULL) {
-
-                strncpy(current_entry.full_entry, entry_start, MAX_ENTRY_LENGTH);
-                *root = tree_insert(*root, current_entry);
-                memset(&current_entry, 0, sizeof(current_entry));
-            }
-            in_entry = 1;
-            entry_start = line;
+        char *trimmedLine = line;
+        while (isspace(*trimmedLine)) trimmedLine++;
+        char *end = trimmedLine + strlen(trimmedLine) - 1;
+        while (end > trimmedLine && isspace(*end)) end--;
+        *(end + 1) = '\0';
+        
+        if (strlen(trimmedLine) == 0 || trimmedLine[0] == '%') {
+            continue;
         }
+        
+        if (strstr(trimmedLine, "author") == trimmedLine) {
+            char *start = strchr(trimmedLine, '{');
+            if (start != NULL) {
+                char *end = strrchr(trimmedLine, '}');
+                if (end != NULL) {
+                    *end = '\0';
+                    strncpy(currentAuthor, start + 1, MAX_FIELD - 1);
+                    currentAuthor[MAX_FIELD - 1] = '\0';
+                }
+            }
+        } else if (strstr(trimmedLine, "title") == trimmedLine) {
+            char *start = strchr(trimmedLine, '{');
+            if (start != NULL) {
+                char *end = strrchr(trimmedLine, '}');
+                if (end != NULL) {
+                    *end = '\0';
+                    strncpy(currentTitle, start + 1, MAX_FIELD - 1);
+                    currentTitle[MAX_FIELD - 1] = '\0';
+                }
+            }
+        } else if (strstr(trimmedLine, "publisher") == trimmedLine) {
+            char *start = strchr(trimmedLine, '{');
+            if (start != NULL) {
+                char *end = strrchr(trimmedLine, '}');
+                if (end != NULL) {
+                    *end = '\0';
+                    strncpy(currentPublisher, start + 1, MAX_FIELD - 1);
+                    currentPublisher[MAX_FIELD - 1] = '\0';
+                }
+            }
+        } else if (strstr(trimmedLine, "year") == trimmedLine) {
+            char *start = strchr(trimmedLine, '{');
+            if (start != NULL) {
+                char *end = strrchr(trimmedLine, '}');
+                if (end != NULL) {
+                    *end = '\0';
+                    currentYear = atoi(start + 1);
+                }
+            }
+        } else if (strcmp(trimmedLine, "}") == 0) {
 
-        if (in_entry) {
-            if (strstr(line, "author =")) {
-                sscanf(line, " author = { %[^}] }", current_entry.author);
-            } 
-            else if (strstr(line, "title =")) {
-                sscanf(line, " title = { %[^}] }", current_entry.title);
-            } 
-            else if (strstr(line, "publisher =")) {
-                sscanf(line, " publisher = { %[^}] }", current_entry.publisher);
-            } 
-            else if (strstr(line, "year =")) {
-                sscanf(line, " year = { %[^}] }", current_entry.year);
+            if (strlen(currentAuthor) > 0 && strlen(currentTitle) > 0) {
+                Book *newBook = createBook(currentAuthor, currentTitle, currentPublisher, currentYear);
+                *root = insertBook(*root, newBook);
+                
+                currentAuthor[0] = '\0';
+                currentTitle[0] = '\0';
+                currentPublisher[0] = '\0';
+                currentYear = 0;
             }
         }
     }
-
-    if (in_entry && entry_start != NULL) {
-        strncpy(current_entry.full_entry, entry_start, MAX_ENTRY_LENGTH);
-        *root = tree_insert(*root, current_entry);
-    }
+    
+    fclose(file);
 }
 
 int main(int argc, char *argv[]) {
     if (argc < 3) {
-        printf("Usage: %s output_file input_file1 [input_file2 ...]\n", argv[0]);
+        printf("No arguments");
         return 1;
     }
-
-    struct tnode *root = NULL;
-    FILE *output_file = fopen(argv[1], "w");
-    if (output_file == NULL) {
-        perror("Cannot open output file");
-        return 1;
-    }
-	int i;
+    
+    const char *outputFilename = argv[1];
+    Book *root = NULL;
+    
+    int i;
     for (i = 2; i < argc; i++) {
-        FILE *input_file = fopen(argv[i], "r");
-        if (input_file == NULL) {
-            fprintf(stderr, "Cannot open input file: %s\n", argv[i]);
-            continue;
-        }
-
-        parse_bib_file(input_file, &root);
-        fclose(input_file);
+        processBibFile(argv[i], &root);
     }
+    
+    FILE *output = fopen(outputFilename, "w");
+    if (output == NULL) {
+        fprintf(stderr, "No output file: %s\n", outputFilename);
+        freeTree(root);
+        return 1;
+    }
+    
+    writeTreeToFile(output, root);
+    fclose(output);
 
-    tree_print(root, output_file);
-    fclose(output_file);
+    printf("Search: ", COMPARE_LEN);
+    char searchStr[MAX_FIELD];
+    fgets(searchStr, MAX_FIELD, stdin);
+    searchStr[strcspn(searchStr, "\n")] = '\0';
+    
+    printf("Results:\n");
+    searchInTree(root, searchStr);
 
-    tree_free(root);
-
+    freeTree(root);
+    
     return 0;
 }
+
+/////////// Build ///////////
+// gcc -o main main.c -liconv
+
+////////// Execute //////////
+// ./main output.txt test.bib
+
+
+
+
+
+
+
