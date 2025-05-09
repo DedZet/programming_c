@@ -1,75 +1,66 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <ctype.h>
 
-double eval(char *urav) {
-	
-    char *exp;
-    double result = 0.0;
-    double num;
-    int negative = 0;
-    char *endptr;
-
-    exp = strtok(urav, " +-");
-    
-    if (exp[0] == '-') {
-        negative = 1;
-    }
-
-    if (exp != NULL) {
-    	
-        num = strtod(exp, &endptr);
-        if (negative) result *= -1;
-		else  result = result;
-		
-    }
-
-    while ((exp = strtok(NULL, " +-")) != NULL) {
-    }
-
-    result = 0.0;
-    char *ptr = exp;
-    int sign = 1;
-    
-    while (*ptr) {
-        if (*ptr == ' ') {
-            ptr++;
-            continue;
-        }
-        
-        if (*ptr == '+') {
-            sign = 1;
-            ptr++;
-        } else if (*ptr == '-') {
-            sign = -1;
-            ptr++;
-        }
-        
-        while (*ptr == ' ') ptr++;
-        
-        num = strtod(ptr, &endptr);
-        if (ptr == endptr) {
-            printf("Error nan\n");
-            exit(1);
-        }
-        
-        result += sign * num;
-        ptr = endptr;
-    }
-    
-    return result;
-}
-
 int main() {
-    char expression[64];
+	
+    char exp[256];
     
-    //printf("Enter expression: ");
+    printf("Enter expression: ");
+    scanf("%256s", exp);
     
-    char* test = "120+30-20-5.5";
+    double result = 0;
+    double num = 0;
+    char op = '+';
+
+	int i = 0;
+    while (exp[i] != '\0' && exp[i] != '\n') {
+        while (exp[i] == ' ') i++; // string skip 
+        
+        if (isdigit(exp[i]) || exp[i] == '.') {
+            double temp = 0;
+            int dot = 0;
+            double div = 1;
+            
+            while (isdigit(exp[i]) || exp[i] == '.') {
+                if (exp[i] == '.') {
+                	if (dot) {
+						printf("NaN\n");
+                		return 1;
+                	}
+                
+                dot = 1;
+            	}
+                
+				else {
+                    if (dot) {
+                        div *= 10;
+                        temp = temp * 10 + (exp[i] - '0');
+                    }
+					else {
+                        temp = temp * 10 + (exp[i] - '0');
+                    }
+                }
+                i++;
+            }
+            
+            if (dot) temp /= div;
+            num = temp;
+        }
+        
+
+        if (exp[i] == '+' || exp[i] == '-' || exp[i] == '\0') {
+            if (op == '+') result += num;
+            else if (op == '-') result -= num;
+             
+            if (exp[i] != '\0') {
+                op = exp[i];
+                i++;
+            }
+            num = 0;
+
+    	}
+	}
     
-    double result = eval(test);
     printf("Result: %.2lf\n", result);
-    
     return 0;
 }
