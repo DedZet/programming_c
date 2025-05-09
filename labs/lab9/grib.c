@@ -20,14 +20,14 @@ int main(int argc, char *argv[]) {
 	//char* ops = strtok(exestr, "0123456789.");
 	
 	char exestr[64] = "-120+20+60-212+26";
-    char* exp = strtok(exestr, "+-"); 
+    char* exp = strtok(exestr, "+"); 
     
 	int i = 0;
     while (exp != NULL) {
     	
-        	double num = strtod(exp, NULL);
+        	double num = strtod(exp, NULL); 
         	
-        	printf("%.2lf\n", sign(exestr,i)*num);
+        	printf("%.2lf\n", sign(exestr,i)*num); // 60-212
         	exp = strtok(NULL, "+-");
         	i++;
         }
