@@ -59,9 +59,15 @@ int compare_surname(Human a, Human b) {
 }
 
 int compare_year(Human a, Human b) {
-    if (a.year < a.year) return -1;
-    if (a.year > a.year) return 1;
-    if (a.year == a.year) return 0;
+    if (a.year < b.year) return -1;
+    if (a.year > b.year) return 1;
+    if (a.year == b.year) return 0;
+}
+
+int compare_height(Human a, Human b) {
+    if (a.height < b.height) return -1;
+    if (a.height > b.height) return 1;
+    if (a.height == b.height) return 0;
 }
 
 int compare_genf(Human a, Human b) {
@@ -74,12 +80,6 @@ int compare_genm(Human a, Human b) {
 	if( a.gender < b.gender ) return 1;
 	if( a.gender > b.gender ) return -1;
 	if( a.gender == b.gender ) return 0;
-}
-
-int compare_height(Human a, Human b) {
-    if (a.height < a.height) return -1;
-    if (a.height > a.height) return 1;
-    if (a.height == a.height) return 0;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -132,11 +132,6 @@ int combo_compare(Human a, Human b) {
             result = compare_height(a, b);
 
 	}	
-//
-//	else {
-//			printf("not an operation");
-//			return result;
-//		}
 		
 	return result;
 }
@@ -173,8 +168,6 @@ Human *operations(Human hum[], char chose[]) {
 		
 	else qsort(hum, GLSIZE, sizeof(Human), combo_compare);
 		
-		////////////////// RETURNS ///////////////////
-		
 	return hum;
 }
 
@@ -184,7 +177,6 @@ int main(int argc, char *argv[]) {
 	
     Human humans[GLSIZE];
     Human sorted[GLSIZE];
-    
 	
 	FILE *namesfile = fopen("names.txt","r");
 		
