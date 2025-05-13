@@ -1,12 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
-int find_sum(int arr[], int size) {
+int find_sum(int num, ...) {
+	
 	int sum = 0;
-	int i;
-	for (i = 0; i < size+1; ++i) {
-		sum += arr[i];
-        }
+	va_list list;
+	va_start(list, num);
+	
+	while (num) {
+		
+		sum += va_arg(list, int);
+		--num;
+	}
+	
+	va_end(list);
     return sum;
 }
 
