@@ -28,19 +28,7 @@ char *cast_wday(int wday) {
 	}
 }
 
-int is_leap(int year) {
-	if (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) return 1;
-	else return 0;
-}
-
-int get_days(int month, int year) {
-	int days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-	
-	if (is_leap(year) && (month == 2)) return 29;
-	else return days[month-1];
-}
-
-char* get_month(int month) {
+char* cast_month(int month) {
 	switch (month) {
 		case 1:
 			return "January";
@@ -81,16 +69,30 @@ char* get_month(int month) {
 	}
 }
 
+int is_leap(int year) {
+	if (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) return 1;
+	else return 0;
+}
+
+int get_days(int month, int year) {
+	int days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	
+	if (is_leap(year) && (month == 2)) return 29;
+	else return days[month-1];
+}
+
+
+
 void print_mon_calendar(int month, int year) {
-	printf("\n--------- %s ---------\n", get_month(month));
-	printf("Mo Tu We Th Fr Sa Su\n");
+	printf("\n--------- %s ---------\n", cast_month(month));
+	printf("Mo  Tu  We  Th  Fr  Sa  Su\n");
 	int days = get_days(month, year);
 	
 	int d;
 	for (d = 1; d <= days; d++) {
 		printf("%d  ", d);
 		
-		if ((d + days) % 7 == 0 || d == days) {
+		if ((d + days) % 7 == 0) {
 			printf("\n");
 		}
 	}
