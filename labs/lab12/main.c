@@ -154,9 +154,5 @@ int main(int argc, char *argv[]) {
 	else {
 		printf("Unknown input");
 	}
-	
-
-	
-	//printf("Y: %s\nM: %s\nD: %s", year, month, day);
 	return 0;
 }
