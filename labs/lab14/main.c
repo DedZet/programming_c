@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <setjmp.h>
 
-jmp_buf env; // buffer for saving the state
+jmp_buf env; // буфер для хранения состояний
 
 void fibonaci(int n, int *sum, int curr, int next) {
     if (n <= 0) {
-        longjmp(env, 1); 
+        longjmp(env, 1); // возвращает управление где был вызван setjump
     }
 
     *sum += curr;
@@ -21,7 +21,7 @@ int main() {
 
     int result = 0;
 
-    if (setjmp(env) == 0) { // tochka returna
+    if (setjmp(env) == 0) { // точка возврата
         fibonaci(count, &result, 1, 1);
     } else {
         printf("Result: %d\n", result);
