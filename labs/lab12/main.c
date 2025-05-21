@@ -19,12 +19,12 @@ int main(int argc, char *argv[]) {
 		
 		struct tm t;
 		t.tm_year = atoi(year) - 1900;
-		t.tm_mon = atoi(month) - 1;	
+		t.tm_mon = atoi(month) - 1;
 		t.tm_mday = atoi(day);
-//		t.tm_hour = 0;
-//		t.tm_min = 0;
-//		t.tm_sec = 0;
-//		t.tm_isdst = -1;
+		t.tm_hour = 0;
+		t.tm_min = 0;
+		t.tm_sec = 0;
+		t.tm_isdst = -1;
 		mktime(&t);
 		
 		printf("The day of the week is %s", format(&t, "%A"));
@@ -42,13 +42,13 @@ int main(int argc, char *argv[]) {
 		
 		mktime(&t);
 
-		daycode = set_daycode(t.tm_year);
-		is_leap(t.tm_year);
+		daycode = set_daycode(atoi(year));
+		is_leap(atoi(year));
 	
 		print_month(t.tm_mon, daycode);
 		printf("\n");
 		
-		daycode = set_daycode(t.tm_year);
+		daycode = set_daycode(atoi(year));
 	}
 	
 	else if (len == 4) { // yyyy
