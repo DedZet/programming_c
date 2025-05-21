@@ -1,42 +1,44 @@
 #include <stdio.h>
-#include <stdint.h>
+#include <string.h>
 
-int cnt_long(long num) {
+// https://habr.com/ru/articles/276957/
+
+typedef unsigned int       u32;
+typedef unsigned long long u64;
+
+u32 cnt_long(u32 n) {
+	u32 result = 0;
+    while(n) {
+    	result++;
+    	n &= n-1;
+	}
 	
-    int count = 0;
-    unsigned long unum = (unsigned long)num;
-    
-    while (unum != 0) {
-        count += unum & 1; 
-        unum >>= 1;
-    }
-    return count;
+	return result;
 }
 
-int cnt_double(double num) {
-    int count = 0;
-    uint64_t *ptr = (uint64_t *)&num;
-    uint64_t bits = *ptr;
-    
-    int i;
-    for (i = 0; i < 64; i++) {
-        count += (bits >> i) & 1;
-    }
-    return count;
+u64 cnt_double(u64 n) {
+	u64 result = 0;
+    while(n) {
+    	result++;
+    	n &= n-1;
+	}
+	
+	return result;
 }
 
 int main() {
 	
-    long numL;
-    double numD;
-
-    printf("Enter long: ");
-    scanf("%ld", &numL);
-    printf("Bit count: %d\n", cnt_long(numL));
-
-    printf("\nEnter double: ");
-    scanf("%lf", &numD);
-    printf("Bit count: %d\n", cnt_double(numD));
+	long numl;
+	double numd;
+	
+	printf("Enter long num: "); 
+	scanf("%ld", &numl);
+	printf("Num has %d bytes\n", cnt_long(numl));
+	    
+	
+	printf("Type double num: "); 
+	scanf("%lf", &numd);
+	printf("Numr has %d bytes\n", cnt_double(numd));
 
     return 0;
 }
