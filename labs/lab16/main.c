@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-int count_bits_long(long num) {
+int cnt_long(long num) {
 	
     int count = 0;
     unsigned long unum = (unsigned long)num;
@@ -13,7 +13,7 @@ int count_bits_long(long num) {
     return count;
 }
 
-int count_bits_double(double num) {
+int cnt_double(double num) {
     int count = 0;
     uint64_t *ptr = (uint64_t *)&num;
     uint64_t bits = *ptr;
@@ -32,11 +32,11 @@ int main() {
 
     printf("Enter long: ");
     scanf("%ld", &numL);
-    printf("Bit count: %d\n", count_bits_long(numL));
+    printf("Bit count: %d\n", cnt_long(numL));
 
     printf("\nEnter double: ");
     scanf("%lf", &numD);
-    printf("Bit count: %d\n", count_bits_double(numD));
+    printf("Bit count: %d\n", cnt_double(numD));
 
     return 0;
 }
