@@ -3,11 +3,13 @@
 
 // https://habr.com/ru/articles/276957/
 
-typedef unsigned int       u32;
-typedef unsigned long long u64;
+typedef unsigned int		u32;
+typedef unsigned long long	u64;
 
 u32 cnt_long(u32 n) {
+	
 	u32 result = 0;
+	
     while(n) {
     	result++;
     	n &= n-1;
@@ -17,7 +19,9 @@ u32 cnt_long(u32 n) {
 }
 
 u64 cnt_double(u64 n) {
+	
 	u64 result = 0;
+	
     while(n) {
     	result++;
     	n &= n-1;
