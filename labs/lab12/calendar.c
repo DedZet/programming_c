@@ -22,6 +22,16 @@ char *months[]= {
 	"December"
 };
 
+char *dayname[]= {
+	"Monday",
+	"Tuesday",
+	"Wednesday",
+	"Thursday",
+	"Friday",
+	"Saturday",
+	"Sunday" 
+};
+
 int set_daycode(int year) {
 	
 	int daycode;
