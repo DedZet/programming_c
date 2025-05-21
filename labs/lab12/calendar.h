@@ -1,6 +1,7 @@
-void print_calendar(int year, int daycode);
 
-void print_month(int year, int month, int daycode);
+void print_calendar(int daycode);
+
+void print_month(int mon, int daycode);
 
 char *dayname[];
 
