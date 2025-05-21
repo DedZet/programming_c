@@ -1,18 +1,12 @@
 #include <stdio.h>
 #include <time.h>
+#include <stdlib.h>
 
-#define TRUE    1
-#define FALSE   0
-#define KGRN  "\x1B[32m"
-#define RED   "\x1B[31m"
-#define YEL   "\x1B[33m"
-#define RESET "\x1B[0m"
+// https://iq.opengenus.org/calendar-application-in-c-programming/
 
-int days_in_month[]={0,31,28,31,30,31,30,31,31,30,31,30,31};
-int today_year = -1, today_month = -1, today_day = -1;
+int days_in_month[] = {0,31,28,31,30,31,30,31,31,30,31,30,31};
 
-char *months[]=
-{
+char *months[]= {
 	" ",
 	"January",
 	"February",
@@ -28,36 +22,33 @@ char *months[]=
 	"December"
 };
 
-
-int determinedaycode(int year)
-{
+int set_daycode(int year) {
+	
 	int daycode;
 	int d1, d2, d3;
 	
-	d1 = (year - 1.)/ 4.0;
-	d2 = (year - 1.)/ 100.;
-	d3 = (year - 1.)/ 400.;
-	daycode = (year + d1 - d2 + d3) %7;
+	d1 = (year - 1) / 4;
+	d2 = (year - 1) / 100;
+	d3 = (year - 1) / 400;
+	
+	daycode = (year + d1 - d2 + d3) % 7;
 	return daycode;
 }
 
 
-int determineleapyear(int year)
-{
-	if(year% 4 == FALSE && year%100 != FALSE || year%400 == FALSE)
-	{
+int is_leap(int year) {
+	if (year % 4 == 0 && year%100 != 0 || year%400 == 0) {
 		days_in_month[2] = 29;
-		return TRUE;
+		return 1;
 	}
-	else
-	{
+	else {
 		days_in_month[2] = 28;
-		return FALSE;
+		return 0;
 	}
 }
 
-void calendar(int year, int daycode)
-{
+void print_calendar(int year, int daycode) {
+	
 	int month, day;
 	for ( month = 1; month <= 12; month++ )
 	{
@@ -73,7 +64,7 @@ void calendar(int year, int daycode)
 		// Print all the dates for one month
 		for ( day = 1; day <= days_in_month[month]; day++ )
 		{
-				printf("%s%2d%s", YEL, day, RESET );
+				printf("%2d", day);
 			
 			// Is day before Sat? Else start next line Sun.
 			if ( ( day + daycode ) % 7 > 0 )
@@ -105,7 +96,7 @@ void print_month(int year, int mon, int daycode)
 		// Print all the dates for one month
 		for ( day = 1; day <= days_in_month[month]; day++)
 		{
-				printf("%s%2d%s", YEL, day, RESET );
+				printf("%2d", day);
 			
 			// Is day before Sat? Else start next line Sun.
 			if ( ( day + daycode ) % 7 > 0 )
@@ -120,4 +111,3 @@ void print_month(int year, int mon, int daycode)
 
 	}
 }
-
