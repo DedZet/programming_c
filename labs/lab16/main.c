@@ -34,11 +34,11 @@ int main() {
 	printf("Enter long num: "); 
 	scanf("%ld", &numl);
 	printf("Num has %d bytes\n", cnt_long(numl));
-	    
+
 	
-	printf("Type double num: "); 
+	printf("Enter double num: "); 
 	scanf("%lf", &numd);
-	printf("Numr has %d bytes\n", cnt_double(numd));
+	printf("Num has %d bytes\n", cnt_double(numd));
 
     return 0;
 }
