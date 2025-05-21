@@ -1,32 +1,6 @@
 #include "calendar.h"
 #include <time.h>
 
-char *dayname(int wday) {
-	switch (wday) {
-		case 0:
-			return "Monday";
-			break;
-		case 1:
-			return "Tuesday";
-			break;
-		case 2:
-			return "Wednesday";
-			break;
-		case 3:
-			return "Thursday";
-			break;
-		case 4:
-			return "Friday";
-			break;
-		case 5:
-			return "Saturday";
-			break;
-		case 6:
-			return "Sunday";
-			break;
-	}
-}
-
 int main(int argc, char *argv[]) {
 
 	char input[12];
@@ -55,7 +29,7 @@ int main(int argc, char *argv[]) {
 		
 		mktime(&t);
 		
-		printf("The day of the week is %s", dayname(t.tm_wday-1));
+		printf("The day of the week is %s", dayname[t.tm_wday-1]);
 	}
 	
 	else if (len == 7) { // yyyy.mm
