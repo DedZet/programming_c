@@ -22,14 +22,15 @@ int main(int argc, char *argv[]) {
 		t.tm_mon = atoi(month) - 1;			// 05
 		t.tm_mday = atoi(day);				// 21
 		
-		t.tm_hour = 0;
-		t.tm_min = 0;
-		t.tm_sec = 0;
-		t.tm_isdst = -1;
+//		t.tm_hour = 0;
+//		t.tm_min = 0;
+//		t.tm_sec = 0;
+//		t.tm_isdst = -1;
 		
 		mktime(&t);
 		
-		printf("The day of the week is %s", dayname[t.tm_wday-1]);
+		printf("The day of the week is %s", format(&t, "%A"));
+		//printf("The day of the week is %s", dayname[t.tm_wday-1]);
 	}
 	
 	else if (len == 7) { // yyyy.mm
