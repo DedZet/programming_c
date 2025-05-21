@@ -21,12 +21,10 @@ int main(int argc, char *argv[]) {
 		t.tm_year = atoi(year) - 1900;
 		t.tm_mon = atoi(month) - 1;	
 		t.tm_mday = atoi(day);
-		
 //		t.tm_hour = 0;
 //		t.tm_min = 0;
 //		t.tm_sec = 0;
 //		t.tm_isdst = -1;
-		
 		mktime(&t);
 		
 		printf("The day of the week is %s", format(&t, "%A"));
