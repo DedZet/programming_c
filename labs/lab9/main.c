@@ -4,44 +4,36 @@
 
 double eval(char *exp) {
 	
-	double result = 0;
+    double result = 0;
     int sign = 1;
     
-    while (*exp != "\0") {
-        if (*exp == ' ') {
-			exp++;
-			continue;
-		}
-        
-        if (*exp == '+') {
+    char *token = strtok(exp, " ");
+    
+    while (token != NULL) {
+        if (strcmp(token, "+") == 0) {
             sign = 1;
-            exp++;
         }
-        
-        else if (*exp == '-') {
+        else if (strcmp(token, "-") == 0) {
             sign = -1;
-            exp++;
+        }
+        else {
+            
+            double num = atof(token); // to double
+            result += sign * num;
+            sign = 1;
         }
         
-        char *end;
-        double num = strtod(exp, &end);
-        
-        if (exp == end) {
-        	break;
-		}
-        
-        result += sign * num;
-        exp = end;
-        sign = 1;  
+        token = strtok(NULL, " ");
     }
+    
     return result;
 }
 
 int main() {
-	
     char input[128];
     printf("Enter expression: ");
-    scanf("%s", input);
+    
+	fgets(input, sizeof(input), stdin);
     
     double result = eval(input);
     printf("Result: %.2lf\n", result);
