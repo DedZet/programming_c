@@ -30,10 +30,11 @@ double eval(char *exp) {
 }
 
 int main() {
+	
     char input[128];
     printf("Enter expression: ");
     
-	fgets(input, sizeof(input), stdin);
+	fgets(input, sizeof(input), stdin); // read whole line
     
     double result = eval(input);
     printf("Result: %.2lf\n", result);
