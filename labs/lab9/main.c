@@ -6,21 +6,21 @@ double eval(char *exp) {
 	
     double result = 0;
     int sign = 1;
-    
     char *token = strtok(exp, " ");
     
     while (token != NULL) {
         if (strcmp(token, "+") == 0) {
             sign = 1;
         }
+        
         else if (strcmp(token, "-") == 0) {
             sign = -1;
         }
+        
         else {
-            
             double num = atof(token); // to double
             result += sign * num;
-            sign = 1;
+            //sign = 1;
         }
         
         token = strtok(NULL, " ");
