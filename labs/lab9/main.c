@@ -6,7 +6,7 @@ double eval(char *exp) {
 	
     double result = 0;
     int sign = 1;
-    char *token = strtok(exp, " ");
+    char *token = strtok(exp, " "); // "5", "+", "3", "-", "2"
     
     while (token != NULL) {
         if (strcmp(token, "+") == 0) {
