@@ -6,15 +6,36 @@
 typedef unsigned int		u32;
 typedef unsigned long long	u64;
 
+//u32 cnt_long(u32 n) {
+//	u32 result = 0;
+//	
+//    while(n) {
+//    	result++;
+//    	n &= n-1;
+//	}
+//	
+//	return result;
+//}
+//
+//u64 cnt_double(u64 n) {
+//	u64 result = 0;
+//	
+//    while(n) {
+//    	result++;
+//    	n &= n-1;
+//	}
+//	
+//	return result;
+//}
+
 u32 cnt_long(u32 n) {
 	
 	u32 result = 0;
 	
-    while(n) {
-    	result++;
-    	n &= n-1;
+	while (n) {
+    	result += n&1; // proverka mladshego bita, samiy praviy == 1
+    	n >>= 1; // n = n >> 1 011100 000111
 	}
-	
 	return result;
 }
 
@@ -22,11 +43,10 @@ u64 cnt_double(u64 n) {
 	
 	u64 result = 0;
 	
-    while(n) {
-    	result++;
-    	n &= n-1;
-	}
-	
+    while (n) {
+    	result += n&1;
+    	n >>= 1;
+  	}
 	return result;
 }
 
@@ -37,12 +57,12 @@ int main() {
 	
 	printf("Enter long num: "); 
 	scanf("%ld", &numl);
-	printf("Num has %d bytes\n", cnt_long(numl));
+	printf("Bit count: %d\n", cnt_long(numl));
 
 	
 	printf("Enter double num: "); 
 	scanf("%lf", &numd);
-	printf("Num has %d bytes\n", cnt_double(numd));
+	printf("Bit count: %d\n", cnt_double(numd));
 
     return 0;
 }
