@@ -8,6 +8,7 @@
 #include <math.h>
 #include <time.h>
 #include <stdbool.h>
+#include <unistd.h>
 
 // Палитра цветов
 static unsigned long colors[7];
@@ -37,8 +38,14 @@ int flower_count = 0;
 void get_colors() {
     XColor tmp;
     for (int i = 0; i < 7; i++) {
-        XParseColor(dis, colormap, color_names[i], &tmp);
-        XAllocColor(dis, colormap, &tmp);
+        if (!XParseColor(dis, colormap, color_names[i], &tmp)) {
+            fprintf(stderr, "Failed to parse color %s\n", color_names[i]);
+            continue;
+        }
+        if (!XAllocColor(dis, colormap, &tmp)) {
+            fprintf(stderr, "Failed to allocate color %s\n", color_names[i]);
+            continue;
+        }
         colors[i] = tmp.pixel;
     }
 }
@@ -62,183 +69,67 @@ bool can_place_flower(Flower new_flower) {
     return true;
 }
 
-// Алгоритм построчной закраски (заливка)
-void flood_fill(int x, int y, unsigned long fill_color) {
-    unsigned long current_color;
-    XImage *image = XGetImage(dis, win, 0, 0, 800, 800, AllPlanes, ZPixmap);
-    
-    // Получаем цвет начальной точки
-    current_color = XGetPixel(image, x, y);
-    
-    // Если цвет уже совпадает с fill_color, выходим
-    if (current_color == fill_color) {
-        XDestroyImage(image);
-        return;
-    }
-    
-    // Стек для хранения точек
-    int stack[800*800][2];
-    int stack_size = 0;
-    
-    // Добавляем начальную точку в стек
-    stack[stack_size][0] = x;
-    stack[stack_size][1] = y;
-    stack_size++;
-    
-    while (stack_size > 0) {
-        // Извлекаем точку из стека
-        stack_size--;
-        int cx = stack[stack_size][0];
-        int cy = stack[stack_size][1];
-        
-        // Если цвет точки не совпадает с исходным, пропускаем
-        if (XGetPixel(image, cx, cy) != current_color) {
-            continue;
-        }
-        
-        // Находим левую границу
-        int left = cx;
-        while (left >= 0 && XGetPixel(image, left, cy) == current_color) {
-            left--;
-        }
-        left++;
-        
-        // Находим правую границу
-        int right = cx;
-        while (right < 800 && XGetPixel(image, right, cy) == current_color) {
-            right++;
-        }
-        right--;
-        
-        // Закрашиваем линию
-        for (int i = left; i <= right; i++) {
-            XDrawPoint(dis, win, gc, i, cy);
-        }
-        
-        // Проверяем строку выше
-        if (cy > 0) {
-            bool in_span = false;
-            for (int i = left; i <= right; i++) {
-                if (XGetPixel(image, i, cy-1) == current_color) {
-                    if (!in_span) {
-                        stack[stack_size][0] = i;
-                        stack[stack_size][1] = cy-1;
-                        stack_size++;
-                        in_span = true;
-                    }
-                } else {
-                    in_span = false;
-                }
-            }
-        }
-        
-        // Проверяем строку ниже
-        if (cy < 799) {
-            bool in_span = false;
-            for (int i = left; i <= right; i++) {
-                if (XGetPixel(image, i, cy+1) == current_color) {
-                    if (!in_span) {
-                        stack[stack_size][0] = i;
-                        stack[stack_size][1] = cy+1;
-                        stack_size++;
-                        in_span = true;
-                    }
-                } else {
-                    in_span = false;
-                }
-            }
-        }
-    }
-    
-    XDestroyImage(image);
-}
+// Функция рисования закрашенного круга
+void draw_filled_circle(int x0, int y0, int radius) {
+    if (radius <= 0) return;
 
-// Функция рисования круга (аналог rasterCircle из circle.c)
-void draw_circle(int x0, int y0, int radius) {
-    int f = 1 - radius;
-    int ddF_x = 1;
-    int ddF_y = -2 * radius;
-    int x = 0;
-    int y = radius;
- 
-    XDrawPoint(dis, win, gc, x0, y0 + radius);
-    XDrawPoint(dis, win, gc, x0, y0 - radius);
-    XDrawPoint(dis, win, gc, x0 + radius, y0);
-    XDrawPoint(dis, win, gc, x0 - radius, y0);
- 
-    while (x < y) {
-        if (f >= 0) {
-            y--;
-            ddF_y += 2;
-            f += ddF_y;
-        }
-        x++;
-        ddF_x += 2;
-        f += ddF_x;
-        
-        XDrawPoint(dis, win, gc, x0 + x, y0 + y);
-        XDrawPoint(dis, win, gc, x0 - x, y0 + y);
-        XDrawPoint(dis, win, gc, x0 + x, y0 - y);
-        XDrawPoint(dis, win, gc, x0 - x, y0 - y);
-        XDrawPoint(dis, win, gc, x0 + y, y0 + x);
-        XDrawPoint(dis, win, gc, x0 - y, y0 + x);
-        XDrawPoint(dis, win, gc, x0 + y, y0 - x);
-        XDrawPoint(dis, win, gc, x0 - y, y0 - x);
-    }
+    // Рисуем границу круга
+    XSetArcMode(dis, gc, ArcChord);
+    XFillArc(dis, win, gc, x0 - radius, y0 - radius, 
+             radius * 2, radius * 2, 0, 360*64);
 }
 
 // Функция рисования цветка
 void draw_flower(Flower flower) {
     int radius = flower.diameter / 2;
-    int center_radius = radius / 4; // 0.25 от диаметра
+    int center_radius = radius / 4;
     
-    // Рисуем лепестки
+    if (flower.color_idx < 0 || flower.color_idx >= 5) {
+        flower.color_idx = 0; // default to white if invalid
+    }
+    
+    // Рисуем лепестки (полностью закрашенные)
     XSetForeground(dis, gc, colors[flower.color_idx]);
     for (int i = 0; i < flower.petals; i++) {
         double angle = 2 * M_PI * i / flower.petals;
         int petal_x = flower.x + radius * cos(angle);
         int petal_y = flower.y + radius * sin(angle);
-        draw_circle(petal_x, petal_y, radius / 3);
+        draw_filled_circle(petal_x, petal_y, radius / 3);
     }
     
     // Рисуем центр цветка (желтый)
     XSetForeground(dis, gc, colors[5]); // yellow
-    draw_circle(flower.x, flower.y, center_radius);
-    flood_fill(flower.x, flower.y, colors[5]);
+    draw_filled_circle(flower.x, flower.y, center_radius);
 }
 
 // Функция добавления нового цветка
 void add_random_flower() {
+    if (flower_count >= MAX_FLOWERS) {
+        // Удаляем два самых старых цветка
+        for (int i = 0; i < flower_count - 2; i++) {
+            flowers[i] = flowers[i + 2];
+        }
+        flower_count -= 2;
+    }
+
     Flower new_flower;
     int attempts = 0;
+    const int max_attempts = 100;
     
     do {
-        // Генерируем случайные параметры
         new_flower.diameter = 20 + rand() % 41; // 20-60
         new_flower.petals = 4 + rand() % 12;   // 4-15
         new_flower.x = new_flower.diameter + rand() % (800 - 2 * new_flower.diameter);
         new_flower.y = new_flower.diameter + rand() % (800 - 2 * new_flower.diameter);
-        
-        // Выбираем случайный цвет (кроме зеленого и черного)
-        do {
-            new_flower.color_idx = rand() % 5; // 0-4 (white, blue, pink, violet, orange)
-        } while (new_flower.color_idx == 6); // skip green
+        new_flower.color_idx = rand() % 5; // 0-4 (white, blue, pink, violet, orange)
         
         attempts++;
-        
-        // Если долго не можем найти место, удаляем первые два цветка
-        if (attempts > 100 && flower_count > 2) {
-            for (int i = 0; i < flower_count - 2; i++) {
-                flowers[i] = flowers[i + 2];
-            }
-            flower_count -= 2;
-            attempts = 0;
-        }
-    } while (!can_place_flower(new_flower) && attempts < 200);
+    } while (!can_place_flower(new_flower) && attempts < max_attempts);
     
-    if (attempts < 200) {
+    if (attempts < max_attempts) {
         flowers[flower_count++] = new_flower;
         draw_flower(new_flower);
+        XFlush(dis);
     }
 }
 
@@ -249,9 +140,15 @@ void init_x() {
     srand(time(NULL));
     
     dis = XOpenDisplay(NULL);
+    if (!dis) {
+        fprintf(stderr, "Cannot open display\n");
+        exit(1);
+    }
+    
     screen = DefaultScreen(dis);
     black = BlackPixel(dis, screen);
     white = WhitePixel(dis, screen);
+    colormap = DefaultColormap(dis, screen);
     
     win = XCreateSimpleWindow(dis, DefaultRootWindow(dis), 0, 0, 
         800, 800, 5, black, white);
@@ -260,10 +157,14 @@ void init_x() {
     XSelectInput(dis, win, ExposureMask | ButtonPressMask | KeyPressMask);
     
     gc = XCreateGC(dis, win, 0, 0);
+    if (!gc) {
+        fprintf(stderr, "Failed to create GC\n");
+        exit(1);
+    }
+    
     XSetBackground(dis, gc, black);
     XSetForeground(dis, gc, white);
     
-    colormap = DefaultColormap(dis, screen);
     get_colors();
     
     // Заливаем окно зеленым цветом
@@ -272,55 +173,90 @@ void init_x() {
     
     XClearWindow(dis, win);
     XMapRaised(dis, win);
+    XFlush(dis);
 }
 
 // Закрытие X Window
 void close_x() {
-    XFreeGC(dis, gc);
-    XDestroyWindow(dis, win);
-    XCloseDisplay(dis);
+    if (gc) XFreeGC(dis, gc);
+    if (win) XDestroyWindow(dis, win);
+    if (dis) XCloseDisplay(dis);
     exit(0);
 }
 
 // Перерисовка окна
 void redraw() {
+    // Заливаем фон зеленым
     XSetForeground(dis, gc, colors[6]); // green
     XFillRectangle(dis, win, gc, 0, 0, 800, 800);
     
+    // Рисуем все цветки
     for (int i = 0; i < flower_count; i++) {
         draw_flower(flowers[i]);
     }
+    XFlush(dis);
 }
 
-int main(int argc, char *argv[]) {
+int main() {
     XEvent event;
-    KeySym key;
-    char text[255];
+    fd_set in_fds;
+    struct timeval tv;
     
     init_x();
     
-    // Добавляем 10 случайных цветков при запуске
-    for (int i = 0; i < 10; i++) {
+    // Добавляем первые 5 цветков
+    for (int i = 0; i < 5; i++) {
         add_random_flower();
     }
     
     while (1) {
-        XNextEvent(dis, &event);
+        // Проверяем события каждые 100ms
+        FD_ZERO(&in_fds);
+        FD_SET(ConnectionNumber(dis), &in_fds);
+        tv.tv_sec = 0;
+        tv.tv_usec = 100000; // 100ms
         
-        if (event.type == Expose && event.xexpose.count == 0) {
-            redraw();
-        }
-        if (event.type == KeyPress && XLookupString(&event.xkey, text, 255, &key, 0) == 1) {
-            if (text[0] == 'q') {
-                close_x();
-            } else if (text[0] == 'a') {
-                add_random_flower();
+        int num_ready = select(ConnectionNumber(dis)+1, &in_fds, NULL, NULL, &tv);
+        
+        if (num_ready > 0) {
+            while (XPending(dis)) {
+                XNextEvent(dis, &event);
+                
+                switch (event.type) {
+                    case Expose:
+                        if (event.xexpose.count == 0) {
+                            redraw();
+                        }
+                        break;
+                        
+                    case KeyPress: {
+                        char text[255];
+                        KeySym key;
+                        if (XLookupString(&event.xkey, text, 255, &key, 0) == 1) {
+                            if (text[0] == 'q') {
+                                close_x();
+                            } else if (text[0] == 'a') {
+                                add_random_flower();
+                            }
+                        }
+                        break;
+                    }
+                        
+                    case ButtonPress:
+                        if (event.xbutton.button == 1) {
+                            add_random_flower();
+                        }
+                        break;
+                }
             }
         }
-        if (event.type == ButtonPress) {
-            if (event.xbutton.button == 1) {
-                add_random_flower();
-            }
+        
+        // Добавляем новый цветок каждую секунду
+        static time_t last_add = 0;
+        time_t now = time(NULL);
+        if (now - last_add >= 1) {
+            add_random_flower();
+            last_add = now;
         }
     }
     
